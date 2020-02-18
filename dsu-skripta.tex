@@ -1,0 +1,2040 @@
+\documentclass{article}
+\usepackage[T1,OT1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[bosnian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{scrextend}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{tabularx}
+\usepackage{mathtools}
+\usepackage[xcdraw]{xcolor}
+\usepackage{listings}
+%\usepackage{inconsolata}
+\usepackage{textcomp}
+\usepackage[european]{circuitikz}
+\usepackage{graphicx}
+\usepackage{tikz,pgfplots}
+\usepackage{siunitx}
+\usepackage{mdframed}
+\usepackage{xcolor}
+\usepackage{enumerate}
+\usepackage{changepage}
+\usepackage{float}
+\usepackage{steinmetz}
+\usepackage{hyperref}
+\usepackage{pdfcomment}
+\usepackage{dashrule}
+\usetikzlibrary{calc}
+\usepgfplotslibrary{groupplots}
+
+\usetikzlibrary{shapes, arrows}
+\usetikzlibrary{positioning}
+\usetikzlibrary{patterns}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{arrows.meta}
+
+\definecolor{ispitivanje}{HTML}{00E676}
+\definecolor{ispit}{HTML}{E91E63}
+\definecolor{customq}{HTML}{FFB300}
+\definecolor{pitanje}{HTML}{7E57C2}
+\definecolor{myblue}{HTML}{1976D2}
+\definecolor{mypink}{HTML}{E040FB}
+\definecolor{myyellow}{HTML}{FFEA00}
+
+\newcommand{\zplus}{$^\text{\small \ttfamily \color{ispitivanje}Ispitivanje}$}
+\newcommand{\ispit}{$^\text{\small \ttfamily \color{ispit}Završni}$}
+\newcommand{\custom}{$^\text{\small \ttfamily \color{customq}Custom}$}
+\newcommand{\suma}{\sum\limits}
+\newcommand{\interject}[2]{{ \color{pitanje}\setlength{\fboxsep}{1pt}\boxed{\pdfmarkupcomment[opacity=0]{\textbf{\ttfamily Pitanje}}{Pitanje: #1\textCR Odgovor: #2}} }}
+\newcommand{\comment}[2]{{ \color{pitanje}\pdfmarkupcomment[opacity=0]{#1}{#2} }}
+\newcommand{\napomena}[1]{{\color{pitanje}\setlength{\fboxsep}{1pt}\boxed{\comment{\textbf{\ttfamily Napomena}}{#1}}}}
+\newcommand{\z}[1]{\mathcal Z \left\{ #1 \right\} }
+\newcommand{\zm}[1]{\mathcal Z_m \left\{ #1 \right\} }
+\newcommand{\invzm}[1]{\mathcal Z_m^{-1} \left\{ #1 \right\} }
+\newcommand{\lap}[1]{\mathcal L \left\{ #1 \right\} }
+\newcommand{\invz}[1]{\mathcal Z^{-1} \left\{ #1 \right\} }
+\newcommand{\invlap}[1]{\mathcal L^{-1} \left\{ #1 \right\} }
+
+%Definicije okruzenja
+\newenvironment{defquote}
+	{\begin{center}\begin{minipage}{0.9\linewidth}\begin{mdframed}[linewidth=1.2pt]}
+		{\end{mdframed}\end{minipage}\end{center}}
+\newenvironment{answer}{\begin{addmargin}[5pt]{0pt}}{\end{addmargin}}
+\newenvironment{fig}{\begin{figure}[H]\centering}{\end{figure}}
+
+\newenvironment{tikzpic}[1][]{\begin{tikzpicture}[#1]}{\end{tikzpicture}}
+
+\newcommand{\graphcapt}{}
+\newenvironment{graphc}[1][]{\begin{fig}\renewcommand{\graphcapt}{#1}\begin{tikzpicture}}{\end{tikzpicture}\caption{\graphcapt}\end{fig}}
+
+\newenvironment{graph}{\begin{fig}\begin{tikzpicture}}{\end{tikzpicture}\end{fig}}
+\newcommand{\fbdcapt}{}
+\newenvironment{fbdc}[1][]{\begin{fig}\renewcommand{\fbdcapt}{#1}\begin{tikzpicture}[fbd]}{\end{tikzpicture}\caption{\fbdcapt}\end{fig}}
+
+\newenvironment{fbd}{\begin{fig}\begin{tikzpic}[fbd]}{\end{tikzpic}\end{fig}}
+
+\newcommand{\header}[1]{\begin{center}\large \bf \color{myblue}- #1 -\end{center}}
+
+\tikzstyle{block} = [draw, fill=gray!15, rectangle, minimum height=3em, minimum width=6em]
+\tikzstyle{sum} = [draw, fill=gray!15, circle, minimum width=0.6cm]
+\tikzstyle{input} = [coordinate]
+\tikzstyle{output} = [coordinate]
+\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
+\tikzstyle{dot} = [circle, fill=black, inner sep=1.3pt]
+\tikzstyle{pol} = [mark=x, thick, mark options={scale=1.5}]
+\tikzstyle{nula} = [mark=o, thick, mark options={scale=1.25}]
+\tikzstyle{stapic} = [ycomb, mark=-, ultra thick, mark options={scale=1.5, line width=3pt}]
+\tikzstyle{fbd} = [auto, >=latex', on grid=false, every text node part/.style={align=center}]
+\tikzset{
+	odabirac/.pic={
+		\draw coordinate (-west) {} (0,0) -- (35:0.6);
+		\node[anchor=north] at (0.3,0) {$T$};
+		\node[anchor=south] at (0.25,0.2) {$S$};
+		\coordinate (-east) at (0.6,0) {};
+	}
+}
+
+\makeatletter %new code
+\pgfdeclarepatternformonly[\LineSpace,\tikz@pattern@color]{my north east lines}{\pgfqpoint{-1pt}{-1pt}}{\pgfqpoint{\LineSpace}{\LineSpace}}{\pgfqpoint{\LineSpace}{\LineSpace}}%
+{
+	\pgfsetcolor{\tikz@pattern@color}
+	\pgfsetlinewidth{0.4pt}
+	\pgfpathmoveto{\pgfqpoint{0pt}{0pt}}
+	\pgfpathlineto{\pgfqpoint{\LineSpace + 0.1pt}{\LineSpace + 0.1pt}}
+	\pgfusepath{stroke}
+}
+\makeatother
+
+\makeatletter
+\pgfdeclarepatternformonly[\LineSpace,\tikz@pattern@color]{my north west lines}{\pgfqpoint{-1pt}{-1pt}}{\pgfqpoint{\LineSpace}{\LineSpace}}{\pgfqpoint{\LineSpace}{\LineSpace}}%
+{
+	\pgfsetcolor{\tikz@pattern@color} %new code
+	\pgfsetlinewidth{0.4pt}
+	\pgfpathmoveto{\pgfqpoint{\LineSpace + 0.1pt}{0pt}}
+	\pgfpathlineto{\pgfqpoint{0pt}{\LineSpace + 0.1pt}}
+	\pgfusepath{stroke}
+}
+\makeatother %new code
+
+\newdimen\LineSpace
+\tikzset{
+	line space/.code={\LineSpace=#1},
+	line space=3pt
+}
+
+\begin{document}
+	\section*{Predavanje 1}
+	\subsection*{Osnovna struktura upravljanja}
+	\begin{fbd}
+		\node [name=input] {};
+		\node [block, name=davac, right=0.7cm of input] {Davač \\ zadane \\ vrijednosti};
+		\node [sum, name=komparator, right=0.6cm of davac] {};
+		\node [block, name=regulator, right=0.6cm of komparator] {Regulator};
+		\node [block, name=io, right=0.6cm of regulator] {Izvršni \\ organ};
+		\node [block, name=proces, right=0.6cm of io] {Proces};
+		\node [dot, name=cvor, right=0.6cm of proces] {};
+		\node [block, name=transmiter, below=1.5cm of io] {Transmiter};
+		\node [name=output, right=0.7cm of cvor] {};
+		
+		\draw [->] (input) -- (davac);
+		\draw [->] (davac) -- (komparator);
+		\draw [->] (komparator) -- (regulator);
+		\draw [->] (regulator) -- (io);
+		\draw [->] (io) -- (proces);
+		\draw [->] (proces) -- (cvor);
+		\draw [->] (cvor) |- (transmiter);
+		\draw [->] (transmiter) -| node[pos=0.96] {$-$} (komparator);
+		\draw [->] (cvor) -- (output);
+	\end{fbd}
+	
+	Na LSAU smo radili \textit{linearne kontinualne stacionarne sisteme sa skoncentrisanim parametrima}.\\
+	Vremenske funkcije se označavaju sa $f(t)$ i na njih namećemo određene uslove. Na LSAU sve funkcije se prenose u cijelosti, tj. u kontinuitetu.
+	\begin{defquote}
+		Funkcije koje se prenose u kontinuitetu su podložne dejstvu smetnji i šumova. Svaki šum i svaka smetnja se superponira na funkciju. Dejstva smetnji i šumova se povećavaju sa povećanjem spojnog puta kojim prenosimo signale. To je prvi razlog zašto se prešlo na digitalne sisteme upravljanja.
+	\end{defquote}
+	Na LSAU, regulator je bio kontinualni, klase PID. Na DSU imamo digitalni regulator. Samo se taj element mijenja u odnosu na LSAU. Zato je uvedeno digitalno upravljanje. Ovdje se prenose pojedine vrijednosti signala. \textit{Kod DSU, obrada i prenos signala daju osnovnu prednost zašto se koristi digitalno upravljanje.}
+	\begin{defquote} \label{prednosti-dsu}
+		Prednosti DSU:
+		\begin{enumerate}
+			\item Manji uticaj smetnji i šumova,
+			\item Isti element upravljanja se može koristiti za upravljanje sa više tehnoloških veličina,
+			\item Isti spojni put možemo koristiti za više tehnoloških veličina.
+		\end{enumerate}
+	\end{defquote}
+	\subsubsection*{Diskretizacija po nivou}
+	Zadani su unaprijed nivoi koje signal treba da postigne. Pojava te vrijednosti generiše određeni izlaz. Od oblika signala zavisi trenutak kada će biti postignut koji nivo. Ovakvi sistemi se nazivaju relejni - dobro su proučeni, masovno se koriste.
+	\subsubsection*{Diskretizacija po vremenu}
+	Unaprijed se fiksiraju trenuci uzimanja odabiraka. Najbolje je uzeti fiksne vremenske intervale između dva susjedna odabirka. Uzima se vrijednost signala u trenutku odabiranja. Ovakvi sistemi se zovu impulsni sistemi.
+	\subsubsection*{Diskretizacija i po nivou i po vremenu}
+	Zadaju se konstantne vrijednosti nivoa i konstantni trenuci odabiranja (ovo mi ne zvuči dobro, možda je mislio reći konstantno vrijeme ili intervali odabiranja).
+	%TODO uncomment
+	\begin{graphc}[Diskretizacija i po nivou i po vremenu]
+		\begin{axis}[
+			axis lines=center,
+			width=12cm, height=9cm,
+			xmin=-0.5, xmax=8,
+			ymin=-2.5, ymax=5,
+			xlabel=$t$, xlabel style=below right,
+			ylabel=Signal, ylabel style=above right,
+			xtick={0,1,...,4},
+			xticklabels={0, $T$, $2T$, $3T$, $4T$},
+			ytick={-2,-1,...,4},
+			yticklabels={$-2\Delta y$, $-\Delta y$, 0, $\Delta y$, $2\Delta y$, $3\Delta y$, $4\Delta y$},
+			extra x ticks={5,6,7},
+			extra x tick labels={$5T$, $6T$, $7T$},
+			extra x tick style={xticklabel style={yshift=0.5ex, anchor=south}}
+		]
+			\addplot[smooth, thick] coordinates {
+			(0,3) (1,3.4) (2,3.65) (3,3.1) (4,1.6) (5,-0.3) (6,-1.2) (7,-1.7) (7.4,-1.8)
+			};
+			\foreach \i in {-2,-1,...,4}
+			{
+				\addplot[dashed, thin] coordinates {(0,\i) (8,\i)};
+			}
+			\addplot[stapic, domain=0:7] coordinates {(0,3) (1,3) (2,4) (3,3) (4,2) (5,0) (6,-1) (7,-2)};
+			\node at (axis cs:0.7,3.6) {$f(t)$};
+		\end{axis}
+	\end{graphc}
+	
+	\begin{defquote}
+		$\Delta y$ se naziva kvantom. Kvant je konstantan i predstavlja razliku između dva susjedna kvantna nivoa. $T$ je perioda uzorkovanja po vremenu i ona je konstantna, a predstavlja vremenski interval između dva susjedna odabirka.
+	\end{defquote}
+
+	\begin{defquote}
+	Vrijednost signala u trenutku odabiranja $t=kT$, $k=0,1,2,...$ je $f(kT)$, $k=0,1,2,...$ i naziva se odabirak i ima konstantnu vrijednost. U DSU se uzima bliža vrijednost cijelom broju kvantnih nivoa.
+	\end{defquote}
+	Na izlazu uređaja koji odabira vrijednosti signala se javljaju odabirci sa cijelim brojem kvantnih nivoa. To je razlog zašto je eliminisan uticaj smetnji i šumova.
+	\begin{defquote}
+		Digitalni računar mora raditi u realnom vremenu - odabirak upravljačke instrukcije se mora generisati prije pristizanja narednog odabirka na ulaz. Izračunavanje odabirka upravljačke instrukcije mora se završiti prije isticanja te periode uzorkovanja i taj odabirak vrijedi na toj periodi. Određivanje odabirka upravljačke instrukcije mora biti kraće od periode uzorkovanja.
+	\end{defquote}
+	\textit{Uređaji koji vrše odabiranje signala nazivaju se modulatori ili analogno-digitalni konvertori.} Pretvaraju analogni signal u povorku odabiraka. Odabirak je jedna vrijednost. Cijeli broj kvanata se predstavlja binarnim kodom. Prilikom pretvaranja kontinualnog signala u povorku odabiraka moramo sačuvati informaciju. Čuvamo je tako što biramo kvant što manji i periodu uzorkovanja što manju. Odabirak je napisan u binarnom kodu. Kada bismo pustili da $T \to 0$ onda bismo ponovo dobili kontinualan signal.
+	\begin{defquote}
+		Na digitalni regulator (digitalni računar, program, procesor, kontroler) dolaze digitalne riječi, po zadatom algoritmu upravljanja će generisati odabirak upravljačke instrukcije koja će upravljati procesom. Na istoj periodi uzorkovanja je i odabirak na ulazu i odabirak na izlazu.
+	\end{defquote}
+	%TODO Moguce pitanje: nacrtati i objasniti sliku
+	\subsection*{Elementarna struktura upravljanja u digitalnim sistemima}
+	\begin{fbd}
+		\node [name=input] {};
+		\node [block, name=pretvarac, right=1cm of input] {Pretvarač};
+		\node [sum, name=komparator, right=1cm of pretvarac] {};
+		\node [block, name=racunar, right=1cm of komparator] {Digitalni \\ računar};
+		\node [block, name=dac, right=1cm of racunar] {D/A};
+		\node [block, name=objekat, right=1cm of dac] {Objekat};
+		\node [dot, name=cvor, fill=black, right=1cm of objekat] {};
+		\node [name=output, right=1cm of cvor] {};
+		\node [block, name=detektor, below left=1.5cm and 2.5cm of cvor] {Detektor};
+		\node [block, name=adc, left=1cm of detektor] {A/D};
+
+		\draw [->] (input) -- node {$r(t)$} (pretvarac);
+		\draw [->] (pretvarac) -- (komparator);
+		\draw [->] (komparator) -- (racunar);
+		\draw [->] (racunar) -- (dac);
+		\draw [->] (dac) -- (objekat);
+		\draw [->] (objekat) -- (cvor);
+		\draw [->] (cvor) |- (detektor);
+		\draw [->] (detektor) -- (adc);
+		\draw [->] (adc) -| node[pos=0.96] {$-$} (komparator);
+		\draw [->] (cvor) -- node {$c(t)$} (output);
+	\end{fbd}
+	Digitalni računar (elemenat kojim upravljamo sistemom) generiše odabirak upravljačke instrukcije. 
+	%TODO ???
+	Te odabirke (digitalne signale) pretvaramo u digitalno-analognom konvertoru (DAC). U povratnoj grani u LSAU je bio transmiter, ovdje je detektor (uobičajeno ime), koji mjeri stanje objekta kojim upravljamo i to je po pravilu kontinualni signal, neki od standardnih mjernih signala.
+	
+	\begin{defquote}
+		Detektor (transmiter) mjeri stanje objekta kojim upravljamo i to je po pravilu kontinualni signal, neki od standardnih mjernih signala.
+	\end{defquote}
+	\begin{defquote}
+		A/D konvertor pretvara kontinualni signal u digitalni koji se dovodi na komparator i upoređuje sa onim što smo zadali.
+	\end{defquote}
+	Može biti direktno doveden signal koji je predstavljen digitalnim riječima. Pretvarač pretvara kontinualni signal u digitalni zapis, dobiju se digitalne riječi.
+	
+	\begin{defquote}
+		Kada računar izračuna odabirak upravljačke instrukcije možemo ga pustiti da miruje i obično se daju neke druge zadaće da obavlja do isteka periode upravljanja:
+		\begin{enumerate}
+			\item Obrada mjernih signala,
+			\item Procjena upravljačkih instrukcija (to znači narednog odabirka),
+			\item Identifikacija procesa,
+			\item Izračunavamo podatke za naredni odabirak u kojima učestvuju do sada poznati podaci,
+			\item Adaptacija parametara.
+		\end{enumerate}
+	\end{defquote}
+	
+	\begin{fbdc}[Digitalni računar sa komutatorima]
+		\node[block, name=racunar] {Digitalni \\ računar};
+		\node[dot, name=lijevi, left=1cm of racunar] {};
+		\node[dot, name=desni, right=1cm of racunar] {};
+		\draw (lijevi) -- (racunar) -- (desni);
+		%%%%Lijeva strana%%%
+		%Cvorovi
+		\node[dot, label=above left:\small1] (l1) at ([shift={(110:0.7)}]lijevi) {};
+		\node[dot, label=above left:\small2] (l2) at ([shift={(145:0.7)}]lijevi) {};
+		\node[dot, label=below left:\small3] (l3) at ([shift={(180:0.7)}]lijevi) {};
+		\node[dot, label=below right:\small$n$] (ln) at ([shift={(250:0.7)}]lijevi) {};
+		\draw[dash pattern={on 1pt off 5pt}, thick] (l3) arc (180:250:0.7);
+		\draw[thick] (lijevi) -- (l1);
+		\draw[thick, dashed, red!40] (lijevi) -- (l2);
+		\draw[thick, dashed, green!60] (lijevi) -- (l3);
+		\draw[thick, dashed, blue!40] (lijevi) -- (ln);
+		%Izvodi
+		\coordinate (lsink1) at ([shift={(-2,1.5)}]lijevi) {};
+		\coordinate (lsink2) at ([shift={(-2,-1.5)}]lijevi) {};
+		
+		\draw (l1) |- (lsink1);
+		\draw (l2) -- (lsink1 |- l2);
+		\draw (l3) -- (lsink1 |- l3);
+		\draw (ln) |- (lsink2);
+		\draw[dash pattern={on 0.8pt off 5.5pt}, thick] (lsink2) ++(0.4,0.5) -- +(0,0.5);
+		
+		\draw[draw=none] (lsink2) -- node[anchor=center,rotate=90, midway, yshift=0.5cm]{Kanali $1,2,...,n$} (lsink1);
+		%%%Desna strana%%%
+		%Cvorovi
+		\node[dot, label=above right:\small1] (d1) at ([shift={(70:0.7)}]desni) {};
+		\node[dot, label=above right:\small2] (d2) at ([shift={(35:0.7)}]desni) {};
+		\node[dot, label=below right:\small3] (d3) at ([shift={(0:0.7)}]desni) {};
+		\node[dot, label=below left:\small$n$] (dn) at ([shift={(-70:0.7)}]desni) {};
+		\draw[dash pattern={on 1pt off 5pt}, thick] (d3) arc (0:-70:0.7);
+		\draw[thick] (desni) -- (d1);
+		\draw[thick, dashed, red!40] (desni) -- (d2);
+		\draw[thick, dashed, green!60] (desni) -- (d3);
+		\draw[thick, dashed, blue!40] (desni) -- (dn);
+		%Izvodi
+		\node[inner sep=0] (dsink1) at ([shift={(2,1.5)}]desni) {};
+		\node[inner sep=0] (dsink2) at ([shift={(2,-1.5)}]desni) {};
+		
+		\draw (d1) |- (dsink1);
+		\draw (d2) -- (dsink1 |- d2);
+		\draw (d3) -- (dsink1 |- d3);
+		\draw (dn) |- (dsink2);
+		\draw[dash pattern={on 0.8pt off 5.5pt}, thick] (dsink2) ++(-0.4,0.5) -- +(0,0.5);
+		
+		\draw[draw=none] (dsink2) -- node[anchor=center,rotate=-90, midway, yshift=0.5cm]{Kanali $1,2,...,n$} (dsink1);
+	\end{fbdc}
+	
+	\textbf{Komutator na ulazu i komutator na izlazu digitalnog računara moraju biti sinhronizovani.} Oni imaju svoja napojna kola i imaju kola za sinhronizaciju. Ako procesor upravlja sa više kanala, procesiranje se mora izvršiti unutar periode odabiranja. Proces je spori ako je inerciona vremenska konstanta veća od inercionih vremenskih konstanti ostalih elemenata u sistemu.
+	
+	Za kontinualni signal definišemo periodu uzorkovanja i kvantni nivo. Broj kvantnih nivoa treba biti što veći, a perioda uzorkovanja što manja, da sačuvamo informaciju. Ako je kvantni nivo dovoljno mali, onda možemo smatrati da je cijeli broj kvantnih nivoa u svakom trenutku uzorkovanja jednak vrijednosti signala u trenutku uzorkovanja. U tom slučaju je $f(kT) = f(t)$ za $t=kT$, $k=0,1,2,...$ Na ulaz A/D konvertora se dovodi signal - ako je brzina promjene signala mala što znači da promjena na narednoj periodi uzorkovanja je manja od jednog kvantnog nivoa, signal se može dovesti direktno na A/D konvertor. Ako je promjena na narednoj periodi uzorkovanja manja od jednog kvantnog nivoa to znači da se binarna riječ neće promijeniti na najmlađoj cifri (ona koja je zadnja). Ako je promjena kontinualnog signala na narednoj periodi veća od jednog kvantnog nivoa onda se vrijednost odabirka u tom trenutku uzorkovanja zadržava konstantnom na narednoj periodi uzorkovanja. Uzima se odabirak $f(kT)$, zadržava konstantnim za $kT\le t < (k+1)T$ i to rade kola zadrške. Smanjivanjem periode uzorkovanja bolje aproksimiramo kontinualni signal.
+	
+	\section*{Predavanje 2}
+	Kod A/D konvertora biramo između cijene i brzine konverzije.
+	\begin{defquote}
+		Zahtjevi koji se postavljaju na A/D konvertore:
+		\begin{enumerate}
+			\item Brzina uzimanja odabiraka
+			\item Rezolucija
+			\item Vrijeme konverzije
+			\item Greška uslijed očitanja
+			\item Memorijski moduli
+		\end{enumerate}
+	\end{defquote}
+	
+	\textit{Brzina uzimanja odabiraka:} Ako se signal mijenja na  narednoj periodi uzorkovanja manje od jednog kvantnog nivoa, na ADC taj signal možemo direktno dovesti. Ako je ova promjena veća od jednog kvantnog nivoa potrebno ga je dovesti na kolo zadrške nultog reda. Vrijednost $f(kT)$ se zadržava za $kT \le t < (k+1)T$. $f(kT)$ je odabirak u $k$-tom trenutku uzimanja uzorka. Ako je kvantni nivo dovoljno mali onda možemo smatrati da vrijednost signala $f(t)$ je upravo $f(kT)$.
+	
+	\begin{defquote}
+		Brzina uzimanja odabiraka je gustina uzimanja odabiraka i što su odabirci gušći kvantovanje po vremenu je češće, perioda uzorkovanja je manja i bolja je aproksimacija kontinualnog signala $f(t)$ stepenastim signalom.
+	\end{defquote}
+
+	\textit{Rezolucija} je podatak koji predstavlja preciznost predstavljanja kontinualnog signala povorkom odabiraka. Mora biti što veći broj kvantnih nivoa. Na ulazu ADC je stepenasti signal a na izlazu je povorka odabiraka izražena u binarnom kodu što predstavlja digitalne riječi, pa je preciznost bolja što je veća dužina digitalne riječi.
+	
+	\textit{Vrijeme konverzije} je vrijeme koje protekne od trenutka dovođenja odabirka $f(kT)$ na ulaz ADC pa do trenutka kad se na njegovom izlazu pojavi binarni zapis tog odabirka. To vrijeme je konačno. Pa imamo uzimanje odabirka $f(kT)$, zadržavanje te vrijednosti na narednoj periodi uzorkovanja, jer ne smije biti promjena signala na toj periodi uzorkovanja dok traje proces konverzije tj. prevođenja u binarni kod. Vrijeme kodiranja ne smije biti duže od jedne periode uzorkovanja jer procesor mora raditi u realnom vremenu. Vrijeme konverzije predstavlja čisto transportno kašnjenje ili vrijeme kašnjenja. Ono negativno utiče na stabilnost sistema, koji mora biti stabilan. 
+	
+	\textit{Memorijski moduli:} Zadržavanje vrijednosti odabirka na narednoj periodi uzorkovanja je memorisanje. Kad se izračuna odabirak upravljačke instrukcije po zadatom algoritmu, on mora vrijediti na narednoj periodi uzorkovanja dok se ne izračuna sljedeći.
+	
+	Izlaz sa D/A konvertora je signal niskog energetskog nivoa i takav signal se ne može direktno dovesti na tehnološko postrojenje odnosno objekat upravljanja. Takvi signali se dovode na pojačavač snage ili naponsko-strujni konvertor. Dalje se vode na izvršni organ sa ili bez servo motora pa onda na proces. Sam objekat upravljanja ima strukturu kao na sljedećoj slici:
+	\begin{fbdc}[Objekat upravljanja]
+		\node [coordinate, name=input] {};
+		\node [block, right=1cm of input, name=psnage] {Pojačalo \\ snage};
+		\node [block, right=1cm of psnage, name=io] {Izvršni\\ organ};
+		\node [block, right=1cm of io, name=proces] {Proces};
+		\node [name=output, right=1cm of proces] {};
+		
+		\draw [->] (input) -- (psnage);
+		\draw [->] (psnage) -- (io);
+		\draw [->] (io) -- (proces);
+		\draw [->] (proces) -- (output);
+	\end{fbdc}
+
+	Dalje poopštenje da se jednostavnije crtaju strukture u digitalnim sistemima upravljanja jeste da ne crtamo komutatore. Napojne jedinice i kola sinhronizacije nisu nacrtani, nego se to samo simbolički naznači. Simbolička oznaka jeste da imamo signal $f(t)$ koji je kontinualan, ma šta on bio, diskretizaciju vršimo preklopkom, damo joj ime $S$ i obrće se konstantnom ugaonom brzinom što simbolički označavamo konstantnom periodom uzorkovanja.
+	\begin{fbdc}[Simbolička oznaka idealnog odabirača sa periodom $T$]
+		\node (in) {};
+		\pic[right=1cm of in] (odab) {odabirac};
+		\node[right=1cm of odab-east] (out) {};
+		
+		\draw (in) -- (odab-west);
+		\draw (odab-east) -- (out);
+	\end{fbdc}
+	Na izlazu je povorka odabiraka, obilježava se sa $f^*(t)$ ili $f(kT)$. Tada je:
+	$$f^*(t) = \begin{cases}
+		f(kT), & t=kT, k=0,1,... \\
+		0, & t\neq kT
+	\end{cases}$$
+	Ako je $t=kT$ i ako je kvantni nivo dovoljno mali onda kontinualni signal $f(t)$ aproksimiramo povorkom odabiraka i svaki odabirak možemo smatrati da predstavlja upravo vrijednost kontinualnog signala u trenutku odabiranja. Ako simbličku oznaku uvedemo u osnovnu strukturu upravljanja, onda dobijamo sljedeću sliku:
+	
+	\begin{fbd}[Struktura upravljanja]
+		\tikzstyle{sblock} = [block, minimum width=5em]
+		
+		\node (in) {};
+		\node[sum, right=1.2cm of in] (komp) {};
+		\pic[right=0.7cm of komp] (odab1) {odabirac};
+		\node[block, right=0.7cm of odab1-east] (prog) {Program};
+		\pic[right=0.7cm of prog] (odab2) {odabirac};
+		\node[sblock, right=0.7cm of odab2-east] (kasnj) {$e^{-T_d s}$};
+		\node[sblock, minimum width=4em, right=0.7cm of kasnj] (da) {D/A};
+		\node[block, right=0.7cm of da] (obj) {Objekat};
+		\node[dot, right=0.7cm of obj] (cvor) {};
+		\node[right=0.7cm of cvor] (out) {};
+		
+		\draw[->] (in) -- node[pos=0.3] {$r(t)$} (komp);
+		\draw (komp) -- (odab1-west);
+		\draw[->] (odab1-east) -- (prog);
+		\draw (prog) -- (odab2-west);
+		\draw[->] (odab2-east) -- (kasnj);
+		\draw[->] (kasnj) -- (da);
+		\draw[->] (da) -- (obj);
+		\draw[->] (obj) -- (cvor);
+		\draw[->] (cvor) -- node[midway] {$c(t)$} (out);
+		\draw[draw=none] (komp) -- node[block, below=2cm of prog, midway] (det) {Detektor} (cvor);
+		\draw[->] (cvor) |- (det);
+		\draw[->] (det) -| node[pos=0.96] {$-$} (komp);
+		
+		%Box
+		\coordinate (gl) at ([shift={(-0.3cm,1cm)}]komp.west);
+		\coordinate (dd) at ([shift={(0.3cm,-1cm)}]kasnj.east);
+		\draw[dashed] (gl) rectangle node[anchor=south, yshift=1cm] {Digitalni računar ili mikroprocesor} (dd);
+	\end{fbd}
+	\begin{defquote}
+		$T_d$ je vrijeme kašnjenja i u njemu je sadržano: vrijeme uzimanja odabirka, zadržavanje tog odabirka na narednoj periodi uzorkovanja (tj. memorisanje), vrijeme kodiranja (prevođenje u digitalnu riječ) i vrijeme izračunavanja odabirka upravljačke instrukcije po zadatom algoritmu upravljanja.
+	\end{defquote}
+	Objekat, DAC, detektor i pretvarač su kontinualni dijelovi sistema. Ostali su digitalni.
+	
+	Digitalni dio sistema sa procesorom u glavnoj ulozi dobija odabirke i generiše odabirke - dobija odabirke regulacione greške ili ih formira. Uzimanje odabirka, zadržavanje, kodiranje i izvršenje traju neko transportno kašnjenje $T_d$ koje negativno utiče na sve sisteme.
+	\subsection*{Proces odabiranja i zadrške}
+	
+	Uzmimo neki kontinualni signal. Horizontalna osa je vremenska. Nacrtajmo bilo gdje vremensku osu. Ona nam služi da nanesemo vrijednost signala. Neka sistem počinjemo analizirati u nekom trenutku $kT$. $f(t)$ je signal čiju diskretizaciju vršimo. 
+	\begin{figure}[H] %TODO vremenski dijagram diskretizacije
+		
+	\end{figure}
+	$f_h(t)$ možemo predstaviti kao zbir pravougaonih četvorki.
+	\begin{eqnarray*}
+		&f_h(t) = \left. \suma_{k=-\infty}^\infty f(kT) \left\{h(t-kT) - h[t - (k+1)T]\right\}\ \ \right/ \circ \mathcal{L}& \\
+		&F_h(s) = \suma_{k=-\infty}^\infty f(kT) \dfrac{1-e^{-Ts}}{s} e^{-kTs} = \dfrac{1-e^{-Ts}}{s} \suma_{k=-\infty}^\infty f(kT) e^{-kTs} = G_h(s) F^*(s)& \\
+		&G_h(s) = \dfrac{1-e^{-Ts}}{s}, \ F^*(s) = \suma_{k=-\infty}^\infty f(kT) e^{-kTs}&
+	\end{eqnarray*}
+	$G_h(s)$ je prenosna funkcija koja nosi podatak o zadržavanju odabirka na narednoj periodi uzorkovanja. $F^*(s)$ je kompleksni lik (Laplaceova transformacija) povorke odabiraka. Inverzna Laplaceova transformacija je:
+	$$f^*(t) = \suma_{k=-\infty}^\infty f(kT) \delta(t-kT)$$
+	Ova relacija kaže da se odabirak uzima trenutačno (samo u jednom trenutku) pa se to odabiranje naziva idealno matematičko odabiranje.
+	\begin{figure}[H]%TODO graficki prikaz
+		
+		\label{}
+	\end{figure}
+	Uzimanje odabirka i kodiranje traje neko vrijeme - ne može se vršiti trenutačno, nego to mora trajati neko vrijeme $\varepsilon$. Na narednoj periodi uzorkovanja ne smije biti promjena signala veća od jednog kvantnog nivoa. Onda je sigurno manja od jednog kvantnog nivoa na jednom $\varepsilon$.
+	\begin{eqnarray*}
+		&f_\varepsilon(t) = \left. \suma_{k=-\infty}^\infty f(kT) \left\{h(t-kT) - h\left(t - kT - \varepsilon \right)\right\}\ \ \right/ \cdot \frac{\varepsilon}{\varepsilon} \\
+		&= \varepsilon \suma_{k=-\infty}^\infty f(kT) \dfrac{h(t-kT) - h(t-kT-\varepsilon)}{\varepsilon}& \\
+		&f_\varepsilon^*(t) = \varepsilon \suma_{k=-\infty}^\infty f(kT) \delta(t-kT)&
+	\end{eqnarray*}
+	Ovakvo odabiranje se naziva idealno fizičko odabiranje. Kod idealnog fizičkog odabiranja trebamo dobiti isti rezultat.
+	$$F_h(s) = \frac{1-e^{-Ts}}{\varepsilon s} \left[ \varepsilon \suma_{k=-\infty}^\infty f(kT) e^{-kTs} \right] = G_{h\varepsilon}(s) F_\varepsilon^*(s)$$
+	$$G_{h\varepsilon}(s) = \frac{1-e^{-Ts}}{\varepsilon s}, \ F_\varepsilon^*(s) = \varepsilon \suma_{k=-\infty}^\infty f(kT) e^{-kTs}$$
+	\begin{figure}[H]%TODO struktura sa epsilon
+		
+		\label{}
+	\end{figure}
+
+	\subsection*{Kompleksni lik i frekventne karakteristike povorke odabiraka}
+	Impulsna modulacija:\\
+	
+	%TODO Da li polovi u lijevoj poluravni moraju biti isti kao oni u desnoj koji su unutar primarnog pojasa?
+	\begin{graph} %TODO impulsni modulator
+		\newcommand{\ymax}{5.5}
+		\newcommand{\ymin}{-5.5}
+		\begin{axis}[
+			width=12cm, height=12cm,
+			axis lines=center,
+			xtick={0}, ytick={0},
+			extra y ticks={-3, -2, -1, 1, 2, 3},
+			extra y tick labels={$-j\frac{3\Omega}{2}$, $-j\Omega$, $-j\frac{\Omega}{2}$, $j\frac{\Omega}{2}$, $j\Omega$, $j\frac{3\Omega}{2}$},
+			extra y tick style={
+				yticklabel style={xshift=0.5ex, anchor=south west}
+			},
+			xlabel=Re$\{p\}$, ylabel=$j$Im$\{p\}$,
+			xlabel style=below right, ylabel style=above right,
+			xmin=-4.5, xmax=7,
+			ymin=\ymin, ymax=\ymax,
+			disabledatascaling,
+		]
+			\foreach \i in {-2, 0, 2}
+			{
+				\addplot[pol] coordinates {(2,\i-0.3)};
+				\addplot[pol] coordinates {(2,\i+0.3)};
+			}
+			\addplot[pol] coordinates {(-1,0)};
+			%Konjugovani polovi
+			\addplot[pol] coordinates {(-2, 0.6)};
+			\addplot[pol] coordinates {(-2, -0.6)};
+			%Isprekidane linije pojasa
+			\addplot[dashed] coordinates {(-4.5,-1) (7,-1)};
+			\addplot[dashed] coordinates {(-4.5,1) (7,1)};
+			%Konture
+			\draw[mark=none, very thick, decoration={markings, mark=at position 0.7 with {\arrow[scale=1.5]{>}}}, postaction={decorate}] (1.2,-5) -- (1.2,5) node[pos=0.9, above right] {Re$\{p\}=\gamma$};
+			\draw[very thick, decoration={markings, mark=at position 0.3 with {\arrow[scale=1.5]{>}}}, postaction={decorate}] (1.2,5) arc (90:-90:5) node[pos=0.3, anchor=south west] {\large $C'$};
+			\draw[very thick, decoration={markings, mark=at position 0.3 with {\arrow[scale=1.5]{>}}}, postaction={decorate}] (1.2,5) arc (90:270:5) node[pos=0.3, anchor=south east]{\large $C$};
+			%Poluprecnici
+			\draw[decoration={markings, mark=at position 1 with {\arrow[scale=1.5, >=latex']{>}}}, postaction={decorate}] (1.2,0) -- ++(-50:5) node[pos=0.9, anchor=north east] {\small $R \to \infty$}; %TODO da li je centar u (-1.2,0) ili u (0,0)?
+			\draw[decoration={markings, mark=at position 1 with {\arrow[scale=1.5, >=latex']{>}}}, postaction={decorate}] (1.2,0) -- ++(200:5) node[pos=0.9, anchor=north west] {\small $R \to \infty$};
+			\node[anchor=north east] at (rel axis cs:0.95,0.95) {$\{p\}$};
+		\end{axis}
+	\end{graph}
+	Svi tehnički sistemi su kauzalni što znači da je $f(t) \equiv 0$ za svako $t<0$. Nailazak delta funkcije uzima vrijednost funkcije u tom trenutku.
+	$$i(t) = \suma_{k=-\infty}^\infty \delta(t-kT) = \suma_{k=0}^\infty \delta(t-kT)$$ jer su svi signali koji nose informaciju kauzalni.
+	$$f^*(t) = f(t)i(t)$$
+	\begin{defquote}
+		\subsubsection*{Prvi oblik kompleksnog lika $F^*(s)$:}
+		$$\mathcal{L}\{f(t)i(t)\} = F^*(s) = \suma_{k=0}^\infty f(kT) e^{-kTs}$$
+	\end{defquote}
+
+	Povorka odabiraka mora sačuvati informaciju. Ponekad moramo moći odrediti kompleksni lik povorke odabiraka ako poznajemo kompleksni lik $F(p)$. Ako imamo takav slučaj onda je to definisala konvolucija u kompleksnom domenu pa je:
+	$$F^*(s) = \frac{1}{2\pi j} \int\limits_{\mu - j\infty}^{\mu+j\infty} F(p)I(s-p)\text dp$$
+	$F(p)$ je Laplaceova transformacija originala koji nosi informaciju. Da bi se ovaj integral mogao odrediti onda mora postojati prava $\text{Re}(p) = \gamma$ koja će razdvajati singularitete tipa polova podintegralnih funkcija.
+	$$I(s) = \sum_{k=0}^\infty e^{-kTs}$$
+	Ovu sumu možemo odrediti ako je to geometrijska progresija i onda je jednaka $$\frac{1}{1-e^{-Ts}}, \ |e^{-Ts}|<1$$
+	Egzistiraće prava Re$(p)=\gamma$ koja će razdvojiti singularitete tipa polova podintegralnih funkcija ako je Re$(s)>0$. $F(p)$ je Laplaceova transformacija naše informacije - ona mora biti sastavljena od komponenti koje moraju imati prigušenje ili eksponencijalno opadajuće funkcije. $F(p)$ će imati polove u lijevoj poluravni kompleksne ravni $\{p\}$, a druge podintegralne funkcije će imati polove u desnoj poluravni kompleksne ravni. 
+	\begin{figure}[] %TODO
+		
+	\end{figure}
+	$$F^*(s) = \frac{1}{2\pi j} \int\limits_{\gamma-j\infty}^{\gamma+j\infty} F(p) \frac{1}{1-e^{-T(s-p)}}\ \text dp$$
+	Karakteristična jednačina kompleksnog lika povorke delta funkcija je:
+	$$1-e^{-T(s-p)} = 0$$
+	$$e^{-T(s-p)}=1$$
+	$$p_n = s+jn\frac{2\pi}{T} = s+jn\Omega, \ n=0,\pm1,\pm2,...$$ 
+	$\Omega = \frac{2\pi}{T}$ se naziva perioda uzorkovanja u frekventnom domenu ili kružna učestanost odabiranja. Kompleksni lik $F^*(s)$ možemo određivati polovima, preko rezidijuma, na dva načina. Možemo zatvoriti konturu na lijevu stranu ili na desnu stranu. Kada idemo po konturi $C$ stepen polinoma u nazivniku kompleksnog lika $F(p)$ mora biti barem za 2 veći od stepena polinoma u brojniku: $n\ge m+2$.
+	$$F^*(s) = \frac{1}{2\pi j} \int\limits_{\mu-j\infty}^{\mu+j\infty} \dfrac{P(p)}{\prod_{i=1}^n(p-p_i)} \cdot \frac{1}{1-e^{-T(s-p)}}\ \text dp$$
+	\begin{defquote}
+		\subsubsection*{Drugi oblik kompleksnog lika $F^*(s)$:}
+		$$F^*(s) = \suma_{i=1}^n \frac{P(p_i)}{Q'(p_i)} \cdot \frac{1}{1-e^{-T(s-p_i)}}$$
+	\end{defquote}
+	Kada idemo po konturi $C'$ mora biti $n\ge m+1$. U ovom slučaju dobijamo da je kompleksni lik:
+	\begin{defquote}
+		\subsubsection*{Treći oblik kompleksnog lika $F^*(s)$:}
+		$$F^*(s) = \frac{1}{T} \suma_{n=-\infty}^\infty F(s+jn\Omega) + \frac{1}{2}f(0^+)$$
+		Ovaj oblik se koristi u obradi i prenosu digitalnih signala.
+	\end{defquote}
+	
+	\section*{Predavanje 3}
+	\subsection*{Osobine kompleksnog lika povorke odabiraka}
+	Kompleksni lik $F^*(s)$ je kompleksni lik povorke odabiraka originala i ima dvije osobine:
+	\begin{enumerate}
+		\item Kompleksni lik je periodična funkcija sa periodom ponavljanja $j\Omega$.
+		
+		Polazi se od prvog oblika:
+		$$F^*(s) = \sum_{k=0}^\infty f(kT)e^{-kTs}$$
+		Ako kompleksnu promjenljivu $s$ zamijenimo sa $s+jm\Omega$, gdje je $m$ cijeli broj, onda dobijamo
+		$$\sum_{k=0}^\infty f(kT)e^{-kT(s+jm\Omega)} = \sum_{k=0}^\infty f(kT)e^{-kTs}e^{-jkTm\Omega}$$
+		Pošto je kružna učestanost odabiranja jednaka $\Omega = \frac{2\pi}{T}$, onda je $kTm\frac{2\pi}{T}=2km\pi$ pa je
+		$$e^{-j2km\pi} = 1$$
+		$$F^*(s) = F^*(s+jm\Omega)$$
+		To znači da je $F^*(s)$ periodična funkcija sa periodom ponavljanja $j\Omega$ i ide i na jednu i na drugu stranu do beskonačnosti.
+		\item Ako poznajemo funkciju $F^*(s)$ u $s_1$ onda istu vrijednost funkcija $F^*(s)$ ima i u svim tačkama $s_1+jm\Omega$. Pošto karakteristične tačke (polovi i nule) moraju ležati u lijevoj poluravni kompleksne ravni, onda znamo da polovi i nule mogu biti realni negativni jednostruki ili višestruki, i mogu biti u obliku konjugovano kompleksnih parova ali njihov položaj mora biti unutar $j\Omega$ pa konjugovano kompleksni par može biti sa pozitivnim imaginarnim dijelom ili sa negativnim imaginarnim dijelom i najviše $\Omega/2$. %TODO valja li ovo?
+	\end{enumerate}
+	Pa se lijeva poluravan kompleksne ravni $\{p\}$ dijeli na primarni pojas i komplementarne pojaseve koji se multipliciraju iznad i ispod primarnog pojasa do beskonačnosti.
+	\begin{fig}
+		\begin{tikzpic}[every text node part/.style={align=center}]
+			\newcommand{\ymax}{5.5}
+			\newcommand{\ymin}{-5.5}
+			\begin{axis}[
+				width=14cm,
+				height=12cm,
+				axis lines=center,
+				xtick={0},
+				ytick={0},
+				extra y ticks={-3, -2, -1, 1, 2, 3},
+				extra y tick labels={$-j\frac{3\Omega}{2}$, $-j\Omega$, $-j\frac{\Omega}{2}$, $j\frac{\Omega}{2}$, $j\Omega$, $j\frac{3\Omega}{2}$},
+				extra y tick style={
+					yticklabel style={xshift=0.5ex, anchor=south west}
+				},
+				xlabel=Re$\{p\}$,
+				ylabel=$j$Im$\{p\}$,
+				xlabel style=below right,
+				ylabel style=above right,
+				xmin=-5.5,
+				xmax=3.75,
+				ymin=\ymin,
+				ymax=\ymax,
+			]
+				\addplot[mark=none, very thick] coordinates {(1.5,\ymin) (1.5,\ymax)} node[pos=0.9, above right] {Re$\{p\}=\gamma$};
+				\foreach \i in {-2, 0, 2}
+				{
+					\addplot[pol] coordinates {(2,\i-0.3)};
+					\addplot[pol] coordinates {(2,\i+0.3)};
+				}
+				\addplot[pol] coordinates {(-1,0)};
+				\addplot[nula] coordinates {(-1.5,0)};
+				\addplot[pol] coordinates {(-2,0)};
+				\addplot[pol] coordinates {(-2.5,0)};
+				%Konjugovani polovi
+				\addplot[pol] coordinates {(-3, 0.6)};
+				\addplot[pol] coordinates {(-3, -0.6)};
+				%Konjugovane nule
+				\addplot[nula] coordinates {(-3.5, 0.4)};
+				\addplot[nula] coordinates {(-3.5, -0.4)};
+				%Isprekidane linije pojaseva
+				\addplot[thin, dashed] coordinates {(-5.5,-3) (5.5,-3)};
+				\addplot[thick, dashed] coordinates {(-5.5,-1) (5.5,-1)};
+				\addplot[thick, dashed] coordinates {(-5.5,1) (5.5,1)};
+				\addplot[thin, dashed] coordinates {(-5.5,3) (5.5,3)};				
+				%Srafiranje pojaseva
+				\fill[pattern=my north west lines, pattern color=gray!30, line space=8pt] (axis cs:-5.5,-5) rectangle (axis cs:0,-3);
+				\fill[pattern=my north east lines, pattern color=gray!30, line space=8pt] (axis cs:-5.5,-3) rectangle (axis cs:0,-1);
+				\fill[pattern=my north west lines, pattern color=green!50, line space=8pt] (axis cs:-5.5,-1) rectangle (axis cs:0,1);
+				\fill[pattern=my north east lines, pattern color=gray!30, line space=8pt] (axis cs:-5.5,1) rectangle (axis cs:0,3);
+				\fill[pattern=my north west lines, pattern color=gray!30, line space=8pt] (axis cs:-5.5,3) rectangle (axis cs:0,5);
+				%Oznake pojaseva
+				\node at (axis cs:-4.7,0) {\bf Primarni \\[10pt] \bf pojas};
+				\node at (axis cs:-2.75,3) {\bf Komplementarni \\[15pt] \bf pojasevi};
+				\node at (axis cs:-2.75,-3) {\bf Komplementarni \\[15pt] \bf pojasevi};
+				
+				\node[anchor=north east] at (rel axis cs:1,1) {$\{p\}$};
+			\end{axis}
+		\end{tikzpic}
+	\end{fig}
+	Unutar primarnog pojasa moraju biti sve karakteristične tačke kompleksnog lika $F^*(s)$, od $-j\Omega/2$ do $j\Omega/2$. \interject{Zašto gubimo informaciju o polovima?}{N/A} Područje $-\frac{\Omega}{2} \le \omega \le \frac{\Omega}{2}$ naziva se \textbf{Nyquistovo područje učestanosti.}
+	
+	\subsection*{Karakteristike frekventnog spektra povorke odabiraka}
+	Poći ćemo od 3. oblika kompleksnog lika $F^*(s)$
+	$$F^*(s) = \frac{1}{T} \suma_{n=-\infty}^\infty F(s+jn\Omega) + \frac{1}{2} f(0^+)$$
+	Prilikom diskretizacije kontinualnog signala moramo sačuvati informaciju bez obzira kojim matematskim aparatom radili. Ako pođemo od ovog oblika onda ga koristimo za projektovanje digitalnih filtera i za digitalnu obradu i prenos signala. Ništa nećemo izgubiti na opštosti ako kažemo da je $f(0^+) = 0$. To je neka istosmjerna komponenta. Frekventne karakteristike dobijamo ako kompleksnu promjenljivu zamijenimo njenim imaginarnim dijelom i to smo nazvali Fourierovom transformacijom. Tada dobijamo
+	$$F^*(j\omega) = \frac{1}{T} \suma_{n=-\infty}^\infty F(j\omega+jn\Omega)$$
+	Primarni pojas je za $n=0$:
+	$$F^*(j\omega)\rvert_{n=0} = F_0^*(j\omega) = \frac{1}{T} F(j\omega)$$
+	Naš signal je $f(t)$. Izvršili smo diskretizaciju periodom uzorkovanja $f(t)$ i onda je $F(j\omega) = \mathcal{F}\{f(t)\}$. Pa sada vidimo da unutar Nyquistovog područja učestanosti mi imamo sve frekventne komponente signala koji nosi informaciju, jer je $F(j\omega)$ Fourierova transformacija naše informacije, a $T$ smo odabrali na osnovu brzine promjene signala. U Nyquistovom području imamo sve frekventne komponente, odnosno diskretizacijom smo sačuvali informaciju. Amplitudno-frekventne karakteristike su
+	$$|F^*(j\omega)| = \frac{1}{T} \left| \suma_{n=-\infty}^\infty F(j\omega+jn\Omega) \right| \le \frac{1}{T} \suma_{n=-\infty}^\infty |F(j\omega+jn\Omega)|$$
+	Vidimo da je informacija koju nosi signal $f(t)$ (original) cjelovito sačuvana unutar Nyquistovog područja učestanosti i u beskonačno drugih komplementarnih pojaseva pri čemu je svaki naredni komplementarni pojas po učestanosti pomjeren u područje viših frekvencija za $n\Omega$. Pošto se radi o idealnom matematičkom odabiranju onda impulsni modulator se može shvatiti kao generator koji na svom ulazu ima prosto-periodični signal amplitude $A$ i kružne učestanosti $\omega$, on na svome izlazu generiše signal u Nyquistovom području učestanosti amplitude $A/T$ i kružne učestanosti $\omega$ i u beskonačno mnogo komplementarnih pojaseva iste amplitude $A/T$ i učestanosti pomjerene za $n\Omega$, $n=0,\pm1,\pm2,...$
+	Neka imamo na ulazu:
+	\begin{fig}
+		\begin{tikzpic}
+			\begin{axis}[
+				axis lines=center,
+				width=17.5cm, height=6cm,
+				xlabel=$\omega$, ylabel=$|F(j\omega)|$,
+				xlabel style={anchor=north, yshift=-0.5ex},
+				xtick={-5,-4,-3,-2,-1,0,1,2,3,4,5}, ytick={0,1},
+				xticklabels={$-\frac{5\Omega}{2}$,$-2\Omega$,$-\frac{3\Omega}{2}$,$-\Omega$,$-\frac{\Omega}{2}$,0,$\frac{\Omega}{2}$,$\Omega$,$\frac{3\Omega}{2}$,$2\Omega$,$\frac{5\Omega}{2}$},
+				xticklabel style={anchor=south, yshift=1ex},
+				yticklabels={0,$A$},yticklabel style={xshift=-0.5ex},
+				extra x ticks={-0.5,0.5},
+				extra x tick labels={$-\omega_0$, $\omega_0$},
+				extra x tick style={xticklabel style={anchor=north,yshift=-1ex}},
+				xmin=-5.3, xmax=5.3,
+				ymin=-0.5, ymax=1.5,
+			]
+				\addplot[thick, domain=-0.5:0.5] {cos(deg(x*pi))};
+			\end{axis}
+		\end{tikzpic}
+		\caption{Amplitudno-frekventni spektar ulaznog signala} %TODO mozda ne valja
+		\vspace{10pt}
+		\begin{tikzpic}
+			\begin{axis}[
+				axis lines=center,
+				width=17.5cm, height=6cm,
+				xlabel=$\omega$, ylabel=$|F^*(j\omega)|$,
+				xlabel style={anchor=north, yshift=-0.5ex},
+				ylabel style={anchor=west},
+				xtick={-5,-4,-3,-2,-1,0,1,2,3,4,5}, ytick={0,1},
+				xticklabels={$-\frac{5\Omega}{2}$,$-2\Omega$,$-\frac{3\Omega}{2}$,$-\Omega$,$-\frac{\Omega}{2}\ \ \ \ \ \ $,0,$\ \ \ \ \frac{\Omega}{2}$,$\Omega$,$\frac{3\Omega}{2}$,$2\Omega$,$\frac{5\Omega}{2}$},
+				xticklabel style={anchor=south, yshift=1ex},
+				yticklabels={0,$\frac{A}{T}$},yticklabel style={xshift=-0.5ex, anchor=south east},
+				extra x ticks={-4.5,-3.5,...,4.5},
+				extra x tick labels={$-2\Omega-\omega_0$,$-2\Omega+\omega_0$,$-\Omega-\omega_0$,$-\Omega+\omega_0$,$-\omega_0$, $\omega_0$, $\Omega-\omega_0$, $\Omega+\omega_0$, $2\Omega-\omega_0$, $2\Omega+\omega_0$},
+				extra x tick style={xticklabel style={font=\footnotesize, anchor=north, yshift=-1ex}},
+				xmin=-5.3, xmax=5.3,
+				ymin=-0.5, ymax=1.5,
+			]
+				%Amplituda, isprekidana linija
+				\addplot[thin, dashed] coordinates {(-5.3,1) (5.3,1)};
+				\foreach \i in {-4,-2,...,4}
+				{
+					\addplot[thick, domain=\i-0.5:\i+0.5] {cos(deg((x-\i)*pi))};
+				}
+				%Karakteristika NF filtera
+				\addplot[ultra thick] coordinates {(-2.7,0) (-1,0) (-1,1) (1,1) (1,0) (2.7,0)};
+				\draw (axis cs:1,1) ++(0.5ex,0.5ex) -- +(1.5ex,1.5ex) node[anchor=south west, inner sep=0] {AF karakteristika idealnog NF filtera};
+			\end{axis}
+		\end{tikzpic}
+		\caption{Slučaj kada smo ispravno odabrali $T$}
+		\vspace{10pt}
+		\begin{tikzpic}
+			\begin{axis}[
+				axis lines=center,
+				width=17.5cm, height=6cm,
+				xlabel=$\omega$, ylabel=$|F^*(j\omega)|$,
+				xlabel style={anchor=north, yshift=-0.5ex},
+				xtick={-5,-4,-3,-2,-1,0,1,2,3,4,5}, ytick={0,1},
+				xticklabels={$-\frac{5\Omega}{2}$,$-2\Omega$,$-\frac{3\Omega}{2}$,$-\Omega$,$-\frac{\Omega}{2}$,0,$\frac{\Omega}{2}$,$\Omega$,$\frac{3\Omega}{2}$,$2\Omega$,$\frac{5\Omega}{2}$},
+				xticklabel style={anchor=south, yshift=1ex},
+				yticklabels={0,$\frac{A}{T}$},yticklabel style={xshift=-0.5ex, anchor=south east},
+				extra x ticks={-4.5,-3.5,...,4.5},
+				extra x tick labels={$-3\Omega+\omega_0$,$\Omega-\omega_0$,$-2\Omega+\omega_0$,$-\omega_0$,$-\Omega+\omega_0$, $\Omega-\omega_0$, $\omega_0$, $2\Omega-\omega_0$, $\Omega+\omega_0$, $3\Omega-\omega_0$},
+				extra x tick style={xticklabel style={font=\footnotesize, anchor=north, yshift=-1ex}},
+				xmin=-5.3, xmax=5.3,
+				ymin=-0.5, ymax=1.5,
+			]
+				%Amplituda, isprekidana linija
+				\addplot[thin, dashed] coordinates {(-5.3,1) (5.3,1)};
+				%Ponavljajuci pojedinacni spektri
+				\foreach \i in {-6,-4,-2,...,4,6}
+				{
+					\addplot[thick, domain=\i-1.5:\i+1.5] {cos(deg((x-\i)*pi/3))};
+				}
+				%Sumarni spektar
+				\foreach \i in {-6,-4,...,6}
+				{
+					\addplot[ultra thick, domain=\i-0.5:\i+0.5] {cos(deg((x-\i)*pi/3))};
+					\addplot[ultra thick, domain=\i-1.5:\i-0.5] {cos(deg((x-\i)*pi/3)) + cos(deg(x-\i-4)*pi/3))};
+				}
+			\end{axis}
+		\end{tikzpic}
+		\caption{Slučaj kada smo pogrešno odabrali $T$}
+	\end{fig}
+	Granična kružna učestanost je $\omega_0$ i $-\omega_0$. To je frekvencija najvišeg harmonika u našoj informaciji. Kada je $|\omega_0| \le \frac{\Omega}{2}$, ne dolazi do preklapanja frekventnih spektara. Ako se vratimo u kompleksnu ravan $\{p\}$, polovi kompleksnog lika $F^*(s)$ leže unutar primarnog pojasa. Ako je $\omega_0 > \frac{\Omega}{2}$, onda dolazi do preklapanja frekventnih spektara povorke odabiraka pa se oni zbroje. Ovo je slučaj kada smo pogrešno odabrali periodu uzorkovanja u vremenskom domenu. \interject{Zašto kvantni nivo mora biti mali?}{Kvantni nivo mora biti mali da bismo mogli smatrati da je $f(kT)$ jednako $f(t)$ za $t=kT$, odnosno da nemamo greške u odsijecanju, a to zahtijeva više memorije, tj. binarna riječ zauzima više bita. (\textbf{ovo nema logike})} Ako je došlo do preklapanja gubimo informaciju. 
+	%TODO provjeriti oznake na Y osi
+	\begin{graphc}[Frekventne karakteristike idealnog NF filtera]
+		\begin{axis}[
+			axis lines=center, disabledatascaling,
+			width=12cm, height=8cm,
+			ytick={-1,0,1}, yticklabels={$-\varphi_0$, 0, 1},
+			yticklabel style={anchor=south east},
+			xtick={-1,0,1}, xticklabels={$-\frac{\Omega}{2}$, 0, $\ \ \ \frac{\Omega}{2}$},
+			xmin=-2.5, xmax=2.5,
+			ymin=-2, ymax=1.5,
+			xlabel=$\omega$, xlabel style=below right,
+		]
+			\addplot[very thick] coordinates {(-2,0) (-1,0) (-1,1) (1,1) (1,0) (2,0)};
+			\addplot[very thick, domain=0:2] {-x} node[pos=0.6, anchor=south west, align={left}] {Fazno\\frekventna\\karakteristika};
+			\node[anchor=west, align={left}] at (1,1) {Amplitudno\\frekventna\\karakteristika};
+			\draw[dashed] (0,-1) -| (1,0);
+		\end{axis}
+	\end{graphc}
+	Ako na ovakvo kolo dovedemo povorku odabiraka na ulaz, na izlazu se dobije $f(t-T_d)$. $T_d$ se naziva grupno kašnjenje i jednako je koeficijentu nagiba pravca fazno frekventne karakteristike, tj. $T_d = \frac{2\varphi_0}{\Omega}$. Ovaj niskopropusni filter je hipotetički, on praktično ne postoji.
+	\subsubsection*{Teorema odabiranja}
+	\begin{enumerate}
+		\item Uzorkovanjem u vremenskom domenu mi dobijamo povorku odabiraka koja mora sačuvati informaciju. Perioda uzorkovanja u vremenskom domenu ne može imati veliku vrijednost, ali ne može biti ni previše mala. Unutar periode uzorkovanja mora se uzeti odabirak i prevesti u digitalnu riječ, po zadatom algoritmu upravljanja izračunati odabirak upravljačke instrukcije i taj odabirak vrijedi na toj periodi uzorkovanja. Ako je brzina promjene signala velika, moramo zadržati tu vrijednost. Perioda uzorkovanja ne može biti previše mala zato što ne postoje kola koja će trenutačno uzimati odabirak i kodirati. To traje neko vrijeme, odnosno ne postoji idealno matematičko odabiranje.
+		\item Odabirak mora trajati barem neko $\varepsilon<<T$ ali je konačno, nije nulto, jer se unutar tog $\varepsilon$ uzima odabirak i zadržava vrijednost dok se ne izvrši prevođenje u binarni zapis.
+		\item Sa smanjivanjem periode uzorkovanja širi se Nyquistovo područje učestanosti i povećava uticaj smetnji i šumova pa sa povećanjem udaljenosti na koju se prenosi signal ovi uticaji su veći. To znači da perioda uzorkovanja mora biti ograničena i sa donje strane. Moramo imati slučaj kada ne dolazi do preklapanja frekventnih spektara.
+	\end{enumerate}
+	\paragraph{Teorem.}Ako unutar kružne učestanosti $\omega_0$ [rad/s] nema komplementarnih kružnih učestanosti, onda se izlaz sa niskopropusnog filtera može u potpunosti aproksimirati ako je uzeta perioda uzorkovanja $T=\frac{1}{2} \frac{2\pi}{\omega_0}$, gdje je $\omega_0$ granična kružna učestanost signala $f(t)$. Ovo je teorijski maksimum i $T$ se bira manjom zato što je 
+	\begin{enumerate}
+		\item Odabir velike periode $T$ u DSU u odnosu na realnu dinamiku sistema negativan uticaj na pitanje stabilnosti sistema. \interject{Šta je realna/relativna dinamika?}{Predstavlja se vremenskom konstantom.}
+		\item Teško je u praksi odrediti graničnu učestanost u frekventnom spektru,
+		\item U praksi ne postoje idealni niskopropusni filteri.
+	\end{enumerate}
+	
+	\subsection*{Kola zadrške}
+	\begin{fbd}
+		\node (input) {};
+		\node[sum, right=0.9cm of input] 			(komp) {};
+		\pic[right=0.9cm of komp] 						(odab1) {odabirac};
+		\node[block, right=1cm of odab1-east] (rac) {Digitalni\\računar};
+		\pic[right=0.7cm of rac] 							(odab2) {odabirac};
+		\node[block, right=1cm of odab2-east] (da) {D/A};
+		\node[block, right=1cm of da] 				(objekat) {Objekat};
+		\node[dot, right=0.6cm of objekat] 		(cvor) {};
+		\node[block, below=2cm of odab2-east] (det) {Detektor};
+		\node[right=0.7cm of cvor] 						(output) {};
+		
+		\draw[->] (input) -- node[midway] {$r(t)$} (komp);
+		\draw 		(komp) -- node[midway] {$e(t)$} (odab1-west);
+		\draw[->] (odab1-east) -- node[midway] {$e^*(t)$} (rac);
+		\draw 		(rac) -- (odab2-west);
+		\draw[->] (odab2-east) -- node[midway] {$u^*(t)$} (da);
+		\draw[->] (da) -- node[midway] {$m(t)$} (objekat);
+		\draw[->] (objekat) -- (cvor);
+		\draw[->] (cvor) |- (det);
+		\draw[->] (det) -| node[pos=0.96] {$-$} (komp);
+		\draw[->] (cvor) -- node[midway] {$c(t)$} (output);
+	\end{fbd}
+	Njihova osnovna zadaća je da digitalni signal (povorku odabiraka koja dolazi sa digitalnog računara) pretvore u kontinualni. Druga zadaća je da ukloni ili barem u potrebnoj mjeri priguši komplementarne harmonike. Na ulaz kola zadrške dolazi signal $u(0), u(T), u(2T),...,u(kT)$ u trenucima $0,T,2T,...,kT$. Na izlazu treba da se pojavi kontinualni signal - taj kontinualni signal mora trajati na narednoj periodi uzorkovanja $kT \le t < (k+1)T$. $m(t)$ (ulaz na objekat) je kontinualna funkcija, a kolo zadrške treba dati kontinualni signal a ima na raspolaganju povorku odabiraka. Pa da bismo matematski to napisali razvićemo tu funkciju u Taylorov red. Pošto signal treba biti kontinualan na narednoj periodi uzorkovanja, onda ćemo kazati
+	$$m_k(T) = m(kT) + m^{(1)}(kT)(t-kT) + \frac{1}{2!}m^{(2)}(kT)(t-kT)^2+...$$
+	Ovo je Taylorov red signala $m(t)$, pa je $m_k(t)$ jednako $m(t)$, na periodi uzorkovanja $kT \le t < (k+1)T$.
+	$$m^{(1)}(kT) = \left.\frac{\text d m(t)}{\text d t}\right|_{t=kT},\ m^{(2)}(kT) = \left.\frac{\text d^2 m(t)}{\text d^2 t}\right|_{t=kT},...$$
+	Problem je što $m(t)$ ne znamo - znamo samo povorku odabiraka - pa ćemo na osnovu povorke odabiraka koristiti definiciju izvoda:
+	\begin{eqnarray*}
+		&m^{(1)}(kT)=\frac{1}{T}\{m(kT)-m[(k-1)T]\}& \\
+		&m^{(2)}(kT)=\frac{1}{T}\{m^{(1)}(kT)-m^{(1)}[(k-1)T]\}& \\
+		&m^{(2)}(kT)=\frac{1}{T^2}\{m(kT)-2m[(k-1)T]+m[(k-2)T]\}&
+	\end{eqnarray*}
+	Pa vidimo da sve što više koristimo izvoda u Taylorovom razvoju za procjenu, to ćemo imati više odabiraka na ulazu koje ćemo koristiti. Za $n$-ti izvod koristimo $n+1$ odabirak za procjenu, odnosno povećava se zahtjev za memorijskim mjestima. Svaki od ovih odabiraka treba umemorisati i kad zatreba treba ga povući iz memorije i učitati, što traje određeno vrijeme. Kolo zadrške nultog reda koristi u Taylorovom razvoju samo prvi član, a kolo zadrške prvog reda koristi i prvi izvod i samo na narednoj periodi uzorkovanja je duž koja je dio tog pravca.
+	\subsubsection*{Kolo zadrške nultog reda}
+	Imamo da je $m_k(t) = u(kT)$ za $kT \le t < (k+1)T$, $k=0,1,...$.
+	\begin{graph} %TODO provjeriti valja li ovo: da li su vrijednosti funkcije m(t) ograničene na kvantne nivoe?
+		\begin{axis}[
+			axis lines=center,
+			xlabel=$t$, xlabel style=right,
+			disabledatascaling,
+			ytick={0},
+			xtick={0,1,...,4}, xticklabels={0,$T$,$2T$,$3T$,$4T$},
+			xticklabel style={font=\small},
+			extra x ticks={6,7},
+			extra x tick labels={$6T$,$7T$},
+			extra x tick style={xticklabel style={anchor=south, yshift=0.5ex}},
+			xmin=-0.5,xmax=8.2,
+			ymin=-2.5, ymax=4.5,
+		]
+			\addplot[smooth, dashed, thick] coordinates {
+				(0,3) (1,3.4) (2,3.65) (3,3.1) (4,1.6) (5,-0.3) (6,-1.2) (7,-1.7) (7.4,-1.8) (7.8,-1.86)
+			};
+			\foreach \f [count=\i from 0] in {3,3.4,3.65,3.1,1.6,-0.3,-1.2}
+			{
+				\addplot[very thick] coordinates {(\i,0) (\i,\f) (\i+1,\f) (\i+1,0)};
+			}
+			\addplot[very thick] coordinates {(7,0) (7,-1.7) (7.9,-1.7)};
+			\draw (3,3.65) ++(0.1,0.1) -- ++(0.15,0.15) node[inner sep=0,anchor=south west] {$m(t)$};
+		\end{axis}
+	\end{graph}
+	Uzet ćemo da imamo jedinični odabirak (jedinični impuls). On je amplitude 1 pa odziv kola zadrške nultog reda na pobudu koja je jedinični odabirak ili jedinični impuls će biti:
+	$$g_{h0}(t) = h(t)-h(t-T)\ / \circ \mathcal{L}$$
+	$$G_{h0}(s) = \frac{1-e^{-Ts}}{s}$$
+	\begin{defquote}
+		U ovoj prenosnoj funkciji imamo dva problema:
+		\begin{enumerate}
+			\item U nazivniku imamo astatizam prvog reda - to je uvođenje I komponente koja zakreće amplitudno-faznu karakteristiku za $-\pi/2$ u smjeru kazaljke na satu, a to nam ugrožava stabilnost sistema.
+			\item U brojniku imamo blok kašnjenja $e^{-Ts}$, i taj blok nam modifikuje AF karakteristiku pa također dolazi do ugrožavanja rezervi stabilnosti sistema.
+		\end{enumerate}
+	\end{defquote}
+
+  Ako uvedemo smjenu $s=j\omega$, matematički preslikamo imaginarnu osu iz kompleksne ravni $\{s\}$ prenosnom funkcijom u ravan $G(j\omega)$ onda dobijamo da je $$G_{h0}(j\omega) = \frac{1-e^{-j\omega T}}{j\omega} = T\cdot\frac{e^{j\frac{\omega T}{2}} - e^{-j\frac{\omega T}{2}}}{j2\cdot\frac{\omega T}{2}} \cdot e^{-j\frac{\omega T}{2}} = T\cdot \left|\frac{\sin\frac{\omega T}{2}}{\frac{\omega T}{2}}\right| \cdot e^{-j\frac{\omega T}{2}} \text{sgn}\left(\sin\frac{\omega T}{2}\right)$$
+	$$|G_{h0}(j\omega)| = \left|\frac{\sin\frac{\omega T}{2}}{\frac{\omega T}{2}}\right| = \frac{2\pi}{\Omega} \cdot \left|\frac{\sin\frac{\pi\omega}{\Omega}}{\frac{\pi\omega}{\Omega}}\right|$$
+	$$\varphi(t) = \phase{G_{h0}(j\omega)} = -\frac{\omega T}{2} - \pi \suma_{k=0}^\infty k \{h(\omega-k\Omega)-h[\omega-(k+1)\Omega]\}$$
+	\begin{graph}
+		\begin{groupplot}[
+			every text node part/.style={align={center}},
+			group style={
+				group size=1 by 2,
+			},
+			axis lines=center,
+			xlabel=$\omega$, xlabel style={below right},
+			xmin=-0.5, xmax=5.5,
+			xtick={0,1,...,5}, xticklabels={0,$\frac{\Omega}{2}$, $\Omega$, $\frac{3\Omega}{2}$, $2\Omega$, $\frac{5\Omega}{2}$},
+			xticklabel style={font=\small},
+			%
+			ylabel style={above left},
+			width=10cm,
+		]
+		\definecolor{nf}{HTML}{00838F}
+		\nextgroupplot[
+			ylabel=$|G_{h0}(j\omega)|$,
+			ytick={0,1}, ymin=-0.2, ymax=1.5,
+			yticklabels={0,$A=T=\dfrac{2\pi}{\Omega}$},
+			yticklabel style={font=\small},
+			height=5cm,
+		]
+			\addplot[very thick, color=nf] coordinates {(0,1) (1,1) (1,0) (2.5,0)} node [pos=0.3, anchor=south west, align={center}] {Idealni NF filter};
+			\addplot[very thick,domain=-0.001:5.3, samples=100] {abs(sin(deg(x*pi/2))/(x*pi/2))} node[pos=0.3, anchor=south west] {Kolo zadrške nultog reda};
+		\nextgroupplot[
+			ymin=-4.5, ymax=0.8,
+			ylabel=$\phase{G_{h0}(j\omega)}$,
+			ytick={-3,-2,-1,0}, yticklabels={$-3\pi$,$-2\pi$,$-\pi$,0},
+			xticklabel style={above,yshift=0.5ex},
+			height=5.5cm,
+		]
+			\addplot[color=nf, very thick, domain=0:4.9, align={center}] {-0.65*x} node[anchor=south west, pos=0.9] {\color{nf}Idealni\\ \color{nf} NF filter};
+			
+			\addplot[very thick] coordinates {(0,0) (2,-1) (2,-2) (4,-3) (4,-4) (4.9,-4.45)} node[pos=0.7, anchor=north east, align={center}] {Kolo zadrške\\nultog reda};
+		\end{groupplot}
+	\end{graph}
+	Niskopropusni filter ima ravnu karakteristiku, a kolo zadrške nultog reda ima nagibnu karakteristiku i sve što se više približavamo granici još će više slabiti. Imat ćemo da kolo zadrške propušta i visokofrekventne komponente ali te komponente opadaju sa porastom frekvencije. Nova prednost je što u praksi svi objekti kojim upravljamo se ponašaju kao niskopropusni filteri, odnosno propuštaju spektar unutar Nyquistovog područja učestanosti, a komplementarne prigušuju - oni su manje amplitude i još su dodatno prigušeni, pa se zanemaruju.
+	\section*{Predavanje 4}
+	\subsection*{Kolo zadrške prvog reda}
+	Ovo kolo na svom izlazu aproksimira signal na osnovu upravo pristiglog odabirka na ulaz $f(kT)$ i prethodno pristiglog odabirka na ulaz $f((k-1)T)$.
+	$$m_k(t) = u(kT) + u^{(1)}(kT)(t-kT),\ kT\le t < (k+1)T$$
+	$$u^{(1)}(kT) = \frac{1}{T}\{u(kT)-u[(k-1)T]\}$$
+	$$m_k(t) = u(kT) + \frac{1}{T}\{u(kT)-u[(k-1)T]\}(t-kT)$$
+	Pa dovedemo jedinični odabirak na ulaz - odabirak koji se javlja u trenutku $t=0$, a amplituda mu je 1. To je naše $u^*(t)$. Na prvoj periodi od $kT$ do $(k+1)T$, kada stavimo $k=0$, imamo da je
+	$$m_0(t) = u(0) + \frac{1}{T}\{u(0)-u(-T)\}t$$
+	$$u(0)=1,\ u(-T)=0$$
+	$$m_0(t) = 1 + \frac{t}{T},\ 0\le t < T$$
+	Zatim, ako stavimo da je $k=1$, onda ćemo imati da je
+	$$m_1(t) = u(T) + \frac{1}{T}\{u(T)-u(0)\}(t-T)$$
+	$$u(T)=0,\ u(0)=1$$
+	$$m_1(t) = 1-\frac{t}{T}$$
+	Pošto je na ulazu jedinični odabirak, uobičajilo se da je to jedinična impulsna funkcija (nije delta), onda se kaže da je odziv
+	$$g_{h1}(t) = 1 + \frac{t}{T},\ 0\le t < T$$
+	$$g_{h1}(t) = 1- \frac{t}{T},\ T\le t < 2T$$
+	\begin{graphc}[Odziv kola zadrške prvog reda na jedinični odabirak]
+		\begin{axis}[
+			axis lines=center,
+			width=12cm, height=8cm,
+			disabledatascaling,
+			xmin=-1.5, xmax=3.5,
+			ymin=-1.5, ymax=2.5,
+			xlabel=$t$, xlabel style={below right},
+			xtick={0,1,2}, xticklabels={0,$T\ \ $,$\ \ \ \ \ 2T$},
+			ytick={-1,...,2},
+			ylabel=$g_{h1}(t)$, ylabel style={above right}
+		]
+			\addplot[very thick] coordinates {(-1,0) (0,0) (0,1) (1,2) (1,0) (2,-1) (2,0) (3,0)};
+		\end{axis}
+	\end{graphc}
+	$$g_{h1}(t) = \left(1+\frac{t}{T}\right)h(t) - 2\left(1+\frac{t-T}{T}\right)h(t-T) + \left(1+\frac{t-2T}{T}\right)h(t-2T)$$
+	$$G_{h1}(s) = \mathcal L \{g_{h1}(t)\} = \frac{Ts+1}{Ts^2}\left(1-e^{-Ts}\right)^2$$
+	Problemi:
+	\begin{enumerate}
+		\item U nazivniku imamo $s^2$, to je zakretanje amplitudno fazne karakteristike za $-180^\circ$ čime je ugrožena stabilnost,
+		\item U brojniku imamo blok transportnog kašnjenja, koji također ugrožava stabilnost.
+	\end{enumerate}
+	Dodatno, realizacija kola zadrške prvog reda je daleko teža, složenija i skuplja od kola zadrške nultog reda.
+	\subsection*{$\mathcal Z$-transformacija i diskretna prenosna funkcija (funkcija diskretnog prenosa)}
+	$\mathcal Z$-transformacija je ono što je Laplaceova transformacija u kontinualnim sistemima. Ako se radi o sistemima sa jednim ulazom i jednim izlazom sa konstantnom periodom odabiranja i ako su ovi sistemi linearni, onda ova metoda ima u potpunosti primjenu i može dati na sve odgovore prilikom analize i prilikom sinteze. Ako se radi o nelinearnim sistemima, multivarijabilnim sistemima, ako proces odabiranja nije uniforman i ako se radi o nestacionarnim sistemima onda je vrlo teško primjenjivati ovaj matematski aparat. Ideja za uvođenje z-transformacije je došla zbog našeg prvog i drugog oblika $F^*(s)$.
+	
+	\interject{Kako smo odredili drugi oblik kompleksnog lika povorke odabiraka?}{Preko računa rezidijuma i to smo nazvali Heavisideov postupak. Polovi su realni negativni i različiti, znači leže u lijevoj poluravni, sigurno ih obuhvata kontura $C$ onako kako smo je odabrali.}
+	Pretpostavićemo da je $n\ge m+2$. U ovim oblicima nemamo razlomljenu racionalnu formu koju smo koristili prilikom određivanja inverzna Laplaceove transformacije.
+	
+	Ovdje se javlja kompleksna promjenljiva $s$ (promjenljiva Laplaceove transformacije) u eksponentu eksponencijalne funkcije. Znači nisu razlomljene racionalne forme, nego su transcendentne funkcije.
+	
+	Drugi problem je što je $e^{Ts}$ funkcija koja je periodična sa periodom $j\Omega$ pa sve vrijednosti funkcije koje ima u nekoj tački $s_1$, imaće i u $s_1+jm\Omega$, $m=0,\pm1,\pm2,...$ pa se multipliciraju vrijednosti sa desne strane prave Re$\{p\}=\gamma$ i sa lijeve strane gdje su ležali polovi kompleksne funkcije $F(p)$. Zato se došlo na ideju da se uvede nova kompleksna promjenljiva $z=e^{sT}$. Ako nađemo logaritam, onda je 
+	$$s=\frac{1}{T}\ln z$$
+	pa je dobijen kompleksni lik $$F(z) = \mathcal Z \{f^*(t)\} = \mathcal Z \{f(t)\} = F^*(s)\rvert_{s=\frac{1}{T}\ln z} = F^*\left(\frac{1}{T} \ln z\right)$$
+	Inverzna transformacija se primjenjuje na kompleksni lik $F(z)$ i dobija se povorka odabiraka pa je
+	$$\mathcal Z^{-1}\{F(z)\} = f^*(t)$$
+	Ako novu kompleksnu promjenljivu $z$ uvrstimo u prvi i drugi oblik, a primjenjujemo ih prilikom analize i sinteze DSU, dobićemo kompleksne likove:
+	$$F(z) = \suma_{k=0}^\infty f(kT)\left(e^{sT}\right)^{-k} = \suma_{k=0}^\infty f(kT)z^{-k}$$
+	Ako to isto uradimo i u drugom obliku, onda dobijemo:
+	$$F(z) = \mathcal z\{f^*(t)\} = \mathcal Z\{f(t)\} = \suma_{i=1}^n \frac{P(p_i)}{Q'(p_i)} \cdot \frac{z}{z-e^{p_i T}},\ |z^{-1}| < 1$$
+	Ako odemo na konturni integral:
+	$$F^*(s) = \frac{1}{2\pi j} \oint\limits_C \frac{P(p)}{\prod_{i=1}^n (p-p_i)} \cdot \frac{1}{1-e^{-T(s-p)}}\ \text dp$$
+	$$F(z) \mathcal Z \{f^*(t)\} = \frac{1}{2\pi j} \oint\limits_C \frac{F(p) z}{z-e^{pT}}\ \text dp$$
+	
+	\subsubsection*{Jedinična step funkcija}
+	
+	Ako izvršimo diskretizaciju ove funkcije u vremenu sa periodom uzorkovanja $T$, onda su to odabirci amplitude 1:
+	$$h^*(t) = \suma_{k=0}^\infty 1(t)\delta(t-kT) = \suma_{k=0}^\infty \delta(t-kT)$$
+	$$H^*(s) = \suma_{k=0}^\infty f(kT)e^{-kTs} \suma_{k=0}^\infty e^{-kTs} = \frac{1}{1-e^{-Ts}},\ \left|e^{-Ts}\right|<1$$
+	$$\text{Smjena: }e^{Ts}=z$$
+	$$H(z) = \frac{1}{1-z^{-1}} = \frac{z}{z-1},\ |z^{-1}|<1$$
+	\subsubsection*{Eksponencijalna funkcija}
+	$$f(t) = e^{-at},\ a \in \mathbb R$$
+	$$f^*(t) = \suma_{k=0}^\infty e^{-akT} \delta(t-kT)$$
+	$$F^*(s) = \suma_{k=0}^\infty e^{-akT} e^{-kTs} = \frac{1}{1-e^{-(s+a)T}},\ \left|e^{-(s+a)T}\right| < 1$$
+	$$F(z) = \frac{1}{1-e^{-aT}z^{-1}} = \frac{z}{z-e^{-aT}},\ |z^{-1}| < e^{aT}$$
+	\subsubsection*{Sinusna funkcija}
+	$$f(t) = \sin(\omega t)$$
+	$$f^*(t) = \suma_{k=0}^\infty \sin(\omega k T) \delta(t-kT) = \suma_{k=0}^\infty \frac{e^{j\omega kT} - e^{-j\omega kT}}{2j} \delta(t-kT)$$
+	$$F^*(s) = \frac{e^{-Ts}\sin(\omega T)}{e^{-2Ts} - 2e^{-Ts}\cos(\omega T) + 1}$$
+	$$F(z) = \frac{z^{-1}\sin(\omega T)}{z^{-2}-2z^{-1}\cos(\omega T)+1} = \frac{z\sin(\omega T)}{z^2-2z\cos(\omega T)+1}$$
+	Ako uzmemo sinusnu funkciju, trajno oscilovanje konstantne periode uzorkovanja. Jedna puna oscilacija nam definiše jednu punu promjenu. Ako uzmemo periodu uzorkovanja $T=1\text{ oscilacija}$, dobili smo sumu nula i izgubili informaciju. Ako uzmemo $T=\frac{1}{2}\text{ oscilacije}$, ponovo imamo sumu nula. Ako je perioda uzorkovanja $\frac{1}{2}\frac{2\pi}{\omega_0}$ onda smo sačuvali informaciju. Ako je $T=\frac{1}{4} \text{ oscilacije}$, onda smo sačuvali informaciju, ali istu povorku odabiraka bi dali trouglasti signali.
+	\begin{graph} %TODO odabrati bolje boje
+		\begin{axis}[
+			disabledatascaling,
+			axis lines=center,
+			width=11cm, height=6cm,
+			xtick={0}, ytick=0,
+			xlabel=$t$, xlabel style={below right},
+			ymin=-1.3, ymax=1.3,
+		]
+			\addplot[very thick, domain=0:2.5, samples=100] {sin(2*pi*deg(x))};
+			\addplot[dashed] coordinates {(0,1) (3,1)};
+			\addplot[dashed] coordinates {(0,-1) (3,-1)};
+			\addplot[mark=*, mark options={line width=1.8pt}] coordinates {(0,0) (1,0) (2,0)};
+			\addplot[mark=*, mark options={mypink, scale=0.8, line width=1.2pt}] coordinates{(0,0) (0.5,0) (1,0) (1.5,0) (2,0)};
+			\addplot[myblue, thick, mark=*, mark options={myblue, scale=0.3, line width=1.5pt}] coordinates{(0,0) (0.25,1) (0.5,0) (0.75,-1) (1,0) (1.25,1) (1.5,0) (1.75,-1) (2,0) (2.25,1) (2.5,0)};
+		\end{axis}
+	\end{graph}
+	Kada imamo original $f(t)$, ako nađemo kompleksni lik $F(s)$, ako ovo pripada klasi funkcija tipa početnih uslova, onda su jednoznačno određeni original i kompleksni lik $F(s)$. Taj $f(t)$ uvijek će dati $F(s)$, inverzna Laplaceova transformacija dati će original $f(t)$ - jednoznačno su jedno drugim određeni. Ako primijenimo z-transformaciju, kompleksni lik $F(z)$ je jednoznačno određen originalom $f(t)$, ali inverzna z-transformacija nam daje povorku odabiraka $f^*(t)$. Mi gubimo informaciju između trenutaka odabiranja. $F(z)$ i $f^*(t)$ su jednoznačno određeni jedno drugim, ali nije $f(t)$ i $F(z)$. Znači, perioda uzorkovanja mora biti što manja, odabirci moraju biti što gušći.
+	Kada imamo kompleksni lik $F^*(s)$ i kompleksni lik $F(z)$, očigledno ova dva kompleksna lika moraju imati vezu, jer $f(t)$ i $F(s)$ su jednoznačno određeni jedno drugim. Signal možemo predstaviti u kompleksnoj $\{s\}$-ravni karakterističnim tačkama - polovima i nulama. Sve o signalu $f(t)$ možemo očitati iz rasporeda karakterističnih tačaka (polova i nula) kompleksnog lika $F(s)$. Karakteristične tačke kompleksnog lika moraju ležati lijevo od imaginarne ose i nametnuli dozvoljeno vrijeme smirivanja, nametnuli stepen stabilnosti, stepen oscilabilnosti. Poželjna oblast rasporeda polova i nula je prikazana na sljedećoj slici.
+	\begin{graphc}[Poželjna oblast rasporeda polova i nula kompleksnog lika $F(s)$]
+		\begin{axis}[
+			axis lines=center, disabledatascaling,
+			width=7cm, height=7cm,
+			xlabel=Re$\{s\}$, xlabel style={right},
+			ylabel=$j$Im$\{s\}$, ylabel style={above right},
+			xmin=-2, xmax=0.5,
+			xtick={0}, ytick={0},
+		]	
+			\definecolor{-blue}{HTML}{1976D2}
+			\definecolor{mypink}{HTML}{E040FB}
+			\definecolor{-yellow}{HTML}{FFEA00}
+			\addplot[thick, -blue] coordinates {(-0.5,-2) (-0.5,2)};
+			\addplot[thick, -yellow,] coordinates {(-2,2) (0,0) (-2,-2)};
+			\fill[pattern=my north east lines, pattern color=mypink, line space=8pt] (-2,2) -- (-0.5,0.5) -- (-0.5,-0.5) -- (-2,-2);
+			\node at (0.3,1.5) {$\{s\}$};
+		\end{axis}
+	\end{graphc}
+	\interject{Šta smo mogli očitati iz rasporeda polova?}{Stabilnost, brzinu smirivanja, karakter odziva (oscilatoran, kvazioscilatoran, aperiodski), vrijeme smirivanja i oscilatornost.}
+	Pošto je $z = e^{sT}$, onda moramo čitati sve i iz kompleksne ravni $\{z\}$, pa ćemo preslikati iz kompleksne $\{s\}$-ravni u kompleksnu $\{z\}$-ravan. Poželjnu oblast smo nazvali primarni pojas.
+	\begin{graphc}[]
+		\begin{axis}[
+			axis lines=center,
+			disabledatascaling,
+			ymin=-2, ymax=2,
+			ytick={-1,0,1}, xtick={0},
+			yticklabels={$-j\frac{\Omega}{2}$, 0, $j\frac{\Omega}{2}$},
+			yticklabel style={xshift=0.5ex, anchor=west},
+			xlabel=$\sigma$, ylabel=$j\omega$,
+			xlabel style={anchor=west}, ylabel style={anchor=south west},
+			xmin=-2.5, xmax=0.8,
+		]
+			\definecolor{myblue}{HTML}{2979FF}
+			\definecolor{mypink}{HTML}{E040FB}
+			\definecolor{myyellow}{HTML}{FFEA00}
+			\newcommand{\marr}{{>[length=2mm,width=2.5mm]}}
+			\addplot[myblue, thick] coordinates {(-0.5,-2) (-0.5,2)};
+			%Poluprecnik
+			\draw[decoration={markings, mark=at position 1 with {\arrow[scale=1.2]{latex'}}}, postaction={decorate}] (0,0) -- (195:2.12) node[pos=0.75, anchor=south east] {\tiny $R\to\infty$};
+			%Vanjska kontura
+			\draw[very thick, mypink] (0,-1) edge[-\marr] (0,-0.5) edge[-\marr] (0,0.5) -- (0,1) edge[-\marr] (-1,1) -- (-2,1) arc (153.43495:206.56505:2.23625) -- (-2,-1) edge[-\marr] (-1,-1) -- (0.0085,-1);
+			\draw[mypink, very thick, -\marr] (-2.23625,0.00001) -- (-2.23625,0);
+			%Oznake vanjske konture
+			\tikzstyle{oznaka} = [draw, mypink, circle, inner sep=0.5pt, outer sep=4pt, font=\scriptsize]
+			\node[oznaka, anchor=south west] at (0,0) {1};
+			\node[oznaka, anchor=south east] at (0,1) {2};
+			\node[oznaka, anchor=south east] at (-2,1) {3};
+			\node[oznaka, anchor=north east] at (-2,-1) {4};
+			\node[oznaka, anchor=north east] at (0,-1) {5};
+			%Unutrasnja kontura
+			\draw[very thick] (-0.53,-0.88) -- (-0.53,0.88) -- (-1.93,0.88) arc (155.4889804:204.51102:2.1212) -- (-1.93,-0.88) -- (-0.519,-0.88);
+			%Oznake unutrasnje konture
+			\tikzstyle{oznaka1} = [draw, circle, inner sep=0.5pt, outer sep=4pt, font=\scriptsize]
+			\node[oznaka1, anchor=south east] at (-0.53,0) {1};
+			\node[oznaka1, anchor=north east] at (-0.53,0.88) {2};
+			\node[oznaka1, anchor=north west] at (-1.93,0.88) {3};
+			\node[oznaka1, anchor=south west] at (-1.93,-0.88) {4};
+			\node[oznaka1, anchor=south east] at (-0.53,-0.88) {5};
+			\draw[<->] (-0.5, -1.5) -- node[midway, below]{$\sigma$} (0,-1.5);
+			\node[anchor=north east] at (rel axis cs: 1,1) {$\{s\}$};
+			%\addplot[]
+		\end{axis}
+	\end{graphc}
+	
+	\noindent Preslikavanja po oblastima:
+	
+	\paragraph{$(1) - (2)$}
+		\begin{eqnarray*}
+			&z=e^{j\omega T}& \\
+			&0 \le \omega \le \frac{\Omega}{2} = \frac{\pi}{T}& \\
+			&|e^{j\omega T}| = 1&
+		\end{eqnarray*}
+		\vspace{-25pt}
+		\begin{eqnarray*}
+			\omega = 0 &\implies& z=e^0=1 \\
+			\omega = \frac{\pi}{T} &\implies& z=e^{j\pi} = -1
+		\end{eqnarray*}
+	
+	\paragraph{$(2) - (3)$}
+		\begin{eqnarray*}
+			&s=-\sigma + j\frac{\Omega}{2},\ 0\le \sigma < \infty& \\
+			&e^{sT} = e^{-\sigma T}e^{e^{j\pi}} = -e^{-\sigma T}& \\
+		\end{eqnarray*}
+		\begin{eqnarray*}
+			\sigma=0 &\implies& e^{sT}=-1 \\
+			\sigma \to \infty &\implies& e^{sT} \to 0
+		\end{eqnarray*}
+	
+	\paragraph{$(3) - (4)$}
+	\begin{eqnarray*}
+		&s=-\sigma + j\frac{\Omega}{2},\ 0\le \sigma < \infty& \\
+		&e^{sT} = e^{-\sigma T}e^{e^{j\pi}} = -e^{-\sigma T}& \\
+	\end{eqnarray*}
+	\begin{eqnarray*}
+		\sigma=0 &\implies& e^{sT}=-1 \\
+		\sigma \to \infty &\implies& e^{sT} \to 0
+	\end{eqnarray*}
+	
+	\begin{graph}
+		\begin{axis}[
+			axis lines=center,
+			axis equal,
+			disabledatascaling,
+			width=10cm,
+			xmin=-1.2, xmax=1.2,
+			ymin=-1.2, ymax=1.2,
+			xlabel=Re$\{z\}$, ylabel=$j$Im$\{z\}$,
+			xlabel style={below right}, ylabel style={above right},
+			ytick={-1,0,1}, yticklabels={$-j$,0,$j$},
+			xtick={-1,0,1},
+			xticklabel style={anchor=north west},
+			yticklabel style={anchor=south west},
+		]
+			\definecolor{mypink}{HTML}{E040FB}
+			\newcommand{\marr}{{>[length=2mm,width=2.5mm]}}
+			\node[anchor=north east] at (rel axis cs: 1,1) {$\{z\}$};
+			%Vanjska kontura
+				\addplot[mypink, very thick, domain=0:0.99935*pi, samples=100] ({cos(deg(x))}, {sin(deg(x))});
+				\addplot[mypink, very thick] coordinates {(-1,0.01) (-0.02,0.01) (-0.02,-0.01) (-1,-0.01)};
+				\addplot[mypink, very thick, domain=-0.99935*pi:0, samples=100] ({cos(deg(x))}, {sin(deg(x))});
+			%Strelice
+				\draw[-\marr,very thick,mypink] (59.97:1) -- (60:1);
+				\draw[-\marr,very thick,mypink] (239.97:1) -- (240:1);
+				%\draw[-\marr,very thick,mypink] (-0.826,0.01) -- (-0.825,0.01);
+				%\draw[-\marr,very thick,mypink] (-0.774,-0.01) -- (-0.775,-0.01);
+			%Unutrasnja kontura
+				\addplot[very thick, domain=0:0.991*pi, samples=100] ({0.6*cos(deg(x))}, {0.6*sin(deg(x))});
+				\addplot[very thick] coordinates {(-0.6,0.025) (-0.01,0.025) (-0.01,-0.025) (-0.6,-0.025)};
+				\addplot[very thick, domain=-0.991*pi:0, samples=100] ({0.6*cos(deg(x))}, {0.6*sin(deg(x))});
+			%Strelice
+				\draw[-\marr,very thick] (59.97:0.6) -- (60:0.6);
+				\draw[-\marr,very thick] (239.97:0.6) -- (240:0.6);
+				\draw[-\marr,very thick] (-0.351,0.025) -- (-0.35,0.025);
+				\draw[-\marr,very thick] (-0.249,-0.025) -- (-0.25,-0.025);
+			%Poluprecnik
+				\draw[decoration={markings, mark=at position 1 with {\arrow[scale=1.2]{latex'}}}, postaction={decorate}, outer sep=0] (0,0) -- (20:0.6) node[pos=0.75, anchor=east] {\tiny $e^{-\sigma T}$};
+			%Oznake vanjske
+				\tikzstyle{oznaka} = [draw, mypink, circle, inner sep=0.5pt, outer sep=4pt, font=\scriptsize]
+				\node[oznaka, anchor=south west] at (1,0) {1};
+				\node[oznaka, anchor=south east] at (-1,0) {2};
+				\node[oznaka, anchor=south east] at (0,0.025) {3};
+				\node[oznaka, anchor=north east] at (0,-0.025) {4};
+				\node[oznaka, anchor=north east] at (-1,0) {5};
+			%Oznake unutrasnje
+				\tikzstyle{oznaka1} = [draw, circle, inner sep=0.5pt, outer sep=4pt, font=\scriptsize]
+				\node[oznaka1, anchor=south west] at (0.6,0) {1};
+				\node[oznaka1, anchor=south east] at (-0.6,0.025) {2};
+				\node[oznaka1, anchor=south west] at (0,0.025) {3};
+				\node[oznaka1, anchor=north west] at (0,-0.025) {4};
+				\node[oznaka1, anchor=north east] at (-0.6,-0.025) {5};
+		\end{axis}
+	\end{graph}
+	
+	\begin{graphc}[Nepotpuna slika]
+		\begin{axis}[
+			axis lines=center,
+			disabledatascaling,
+			ytick={-1,0,1}, xtick={0},
+			yticklabels={$-j\frac{\Omega}{2}$, 0, $j\frac{\Omega}{2}$},
+		]
+			%Linije oscilabilnosti
+			\addplot[thick] coordinates {(-2,2) (0,0) (-2,-2)}
+											node[pos=0.1, anchor=south west] {$\xi$-prava}
+											node[pos=0.9, anchor=north west] {$\xi$-prava};
+			%Unutrasnja kontura
+			\draw[thick, myblue] (-0.2,0) -- (-0.52,0.98) -- (-1.98,0.98);
+		\end{axis}
+	\end{graphc}
+	
+	\section*{Predavanje 5 \napomena{Neće pitati osobine osim zadnje}}
+	
+	\subsection*{Osobine $\mathcal Z$-transformacije}
+	
+	\subsubsection*{Linearnost}
+	
+	Pretpostavimo da imamo
+		$$\z{f_1(t)} = F_1(z)$$
+		$$\z{f_2(t)} = F_2(z)$$
+	Tada po osobini aditivnosti:
+		$$\z{f_1(t)+f_2(t)} = F_1(z)+F_2(z)$$
+	Ako imamo da je 
+		$$\z{f(t)} = F(z)$$
+	i ako imamo konstantu $a$ koja je vremenski nezavisna, onda je
+		$$\z{af(t)} = aF(z)$$
+		
+	\subsubsection*{Pomak (u vremenskom domenu) i prigušenje (u z-domenu)}
+	
+	\interject{Gdje smo uveli prigušenje - zašto smo ga uveli?}{Da bi funkcija bila apsolutno integrabilna. Ako integral nije konačan onda se funkcija množi sa e\^(-sigma t), gdje je sigma dovoljno velik realan broj da obezbijedi uslov apsolutne konvergencije.}\\[5pt]
+	Ako je
+		$$\z{f(t)} = F(z)$$
+	i ako je $f(t) \equiv 0 \text{ za } t<0$, onda je
+		$$\z{f(t-nT)} = z^{-n}F(z), \ n=0,\pm1,\pm2,...$$
+		$$\z{f(t+nT)} = z^n \left[ F(z) - \suma_{i=0}^{n-1} f(iT)z^{-i} \right],\ n=0,1,...$$
+		
+	\subsubsection*{Prigušenje (u vremenskom domenu) i pomjeranje kompleksnog lika}
+	
+	Neka imamo da je
+		$$\z{f(t)} = F(z),\ f(t) \equiv 0 \text{ za } t<0$$
+	i neka original $f(t)$ prigušimo funkcijom $e^{\mp at}$, pri čemu je $a$ konstanta koja ne zavisi od vremena. U tom slučaju je:
+		$$\z{e^{\mp at}f(t)} = F(s \pm a) \rvert_{s=\frac{1}{T}\ln z} = F\left(ze^{\mp at}\right)$$
+		
+	\subsubsection*{Početna vrijednost}
+	
+		$$f(0) = \lim_{k\to0} f(kT) = \lim_{z\to\infty} F(z)$$
+		
+	\subsubsection*{Krajnja vrijednost}
+	
+	Neka je
+		$$\z{f(t)} = F(z),$$
+	neka je $f(t) \equiv 0 \text{ za } t<0$ i neka funkcija $(1-z^{-1})F(z)$ nema polova na jediničnoj kružnici niti polova van jedinične kružnice u $\{z\}$--ravni, a kružnica ima centar u koordinatnom početku. Tada je
+		$$\lim_{k\to\infty}f(kT) = \lim_{z\to1} [(z-1)F(z)]$$
+		
+	\subsubsection*{Parcijalni izvod}
+	
+	Neka je
+		$$\z{f(t,a)} = F(z,a)$$
+	gdje je $a$ vremenski nezavisno. Tada je
+		$$\z{\frac{\partial}{\partial a}[f(t,a)]} = \frac{\partial}{\partial a} F(z,a)$$
+	Ova osobina se koristi za ispitivanje osjetljivosti diskretnih sistema.
+	
+	\subsubsection*{Konvolucija \napomena{Ovdje je izostavljena priča iz LSAU.}}
+	
+	Neka je
+		$$\z{f_1(t)} = F_1(z), \ f_1(t) \equiv 0 \text{ za } t<0$$
+		$$\z{f_2(t)} = F_2(z), \ f_2(t) \equiv 0 \text{ za } t<0$$
+	Tada proizvod kompleksnih likova $F_1(z)$ i $F_2(z)$ dobijamo na sljedeći način:
+	\begin{defquote}
+		$$F_1(z) \cdot F_2(z) = \z{\suma_{m=0}^n f_1(mT)f_2(nT-mT)}$$
+		Ova relacija se koristi za realizaciju diskretne prenosne funkcije.
+	\end{defquote}
+	Specifičnosti z-transformacije i inverzne z-transformacije: (amandman profesora)
+	\begin{enumerate}
+		\item U ovim metodama analize i sinteze koristimo idealno matematičko odabiranje. Signal koji nosi informaciju se mijenja povorkom odabiraka pri čemu je svaki odabirak ravan vrijednosti signala u trenutku odabiranja. Odabirak se ne može uzeti trenutačno. Realizujemo ga sa nekom četvorkom, četvorka ima svoju površinu. Svaki odabirak ima površinu koja je jednaka vrijednosti signala u trenutku odabiranja.
+		\item Signal mijenjamo povorkom odabiraka koja mora sačuvati informaciju, a između trenutaka odabiranja gubimo podatak o informaciji.
+		\item Kada imamo kompleksne likove u obliku razlomljene racionalne forme, onda je poželjno da stepen polinoma u brojniku bude bar za jedan red manji od stepena polinoma u nazivniku.
+	\end{enumerate}
+
+	\subsection*{Diskretna prenosna funkcija}
+	To je ono što opisuje diskretni dio sistema sa procesorom u glavnoj ulozi.
+	\begin{fbd}
+		\node (in) {};
+		\pic[right=1cm of in] 														(odab1) {odabirac};
+		\node[block, right=1.2cm of odab1-east] 					(g) {$G(s)$};
+		\node[dot, right=1cm of g, myblue] 								(cvor) {};
+		\coordinate[right=2cm of cvor] 										(out) {};
+		\pic[above right=1.2cm and 0.6cm of cvor, myblue] (odab2) {odabirac};
+		
+		\draw 								(in) -- node{$r(t)$} (odab1-west);
+		\draw[->] 						(odab1-east) -- node{$r^*(t)$} (g);
+		\draw[->] 						(g) -- (cvor);
+		\draw[->] 						(cvor) -- (out) node[pos=1]{$c(t)$};
+		\draw[dashed, myblue] (cvor) |- (odab2-west) (odab2-east) edge[->] node[pos=1]{$c^*(t)$} (out |- odab2-east);
+	\end{fbd}
+
+	\begin{fbd}
+		\node (in) {};
+		\pic[right=1cm of in] 																								(odab1) {odabirac};
+		\node[block, right=1.2cm of odab1-east, minimum width=6.5em] 					(g) {};
+		\node[dot, right=1cm of g, myblue] 																		(cvor) {};
+		\coordinate[right=2cm of cvor] 																				(out) {};
+		\pic[above right=1.2cm and 0.6cm of cvor, myblue] 										(odab2) {odabirac};
+		
+		\node[block, right=0 of g.west, minimum width= 3em] {D/A};
+		\node[block, left=0 of g.east, minimum width= 3.5em] {$G_p(s)$};
+		
+		\draw 								(in) -- node{$r(t)$} (odab1-west);
+		\draw[->] 						(odab1-east) -- node{$r^*(t)$} (g);
+		\draw[->] 						(g) -- (cvor);
+		\draw[->] 						(cvor) -- (out) node[pos=1]{$c(t)$};
+		\draw[dashed, myblue] (cvor) |- (odab2-west) (odab2-east) edge[->] node[pos=1]{$c^*(t)$} (out |- odab2-east);
+	\end{fbd}
+	
+	Pretpostavimo da imamo neku prenosnu funkciju u $s$ domenu $G(s)$ i da neki sistem koji smo opisali tom funkcijom pobuđujemo povorkom odabiraka (digitalnim riječima) $r^*(t)$. U općem slučaju ova povorka odabiraka se može dobiti diskretizacijom kontinualnog signala. Tu povorku odabiraka dovodimo na kontinualni dio sistema. Mora postojati elemenat koji će digitalni signal pretvoriti u kontinualni. To je D/A konvertor ili kolo zadrške nultog reda. Prenosna funkcija D/A konvertora je
+		$$G_{h0}(s) = \frac{1-e^{-Ts}}{s}$$
+	pa je naše ukupno $G(s)$ sa prve strukture jednako
+		$$G(s) = \frac{1-e^{-Ts}}{s} G_p(s)$$
+	Kompleksni lik od kontinualnog signala $c(t)$ je
+		$$C(s) = G(s)R^*(s)$$
+	\interject{Kakve probleme imamo sa ovim R*(s)?}{Kazali smo da osim osnovnog spektra unutar Nyquistovog područja učestanosti posjedujemo i komplementarne spektre. n-ti spektar se množi sa 1/T i pomjera u područje viših učestanosti za n*Omega.}
+	Komplementarni spektri također imaju komponentu u odzivu, pa određivanje kompleksnog izlaza postaje vrlo komplikovana zadaća. Pojednostavljenje: izvršimo diskretizaciju odziva istom periodom uzorkovanja i odabiračem koji je sinhronizovan sa odabiračem na ulazu (plava boja). Ako smo izvršili diskretizaciju kontinualnog izlaza, onda dobijamo $c^*(t)$. Ako smo to uradili, onda smo dobili da je
+		$$C^*(s) = \frac{1}{T}\suma_{n=-\infty}^\infty C(s+jn\Omega) = \frac{1}{T} \suma_{n=-\infty}^\infty G(s+jn\Omega)R^*(s+jn\Omega)$$
+	pa vidimo da je kompleksni lik diskretnog izlaza periodična funkcija po kružnoj učestanosti čija je perioda upravo kružna učestanost odabiranja $\Omega = \frac{2\pi}{T}$. Dobijamo da je
+		$$R^*(s+jn\Omega) = R^*(s),\ n=0,\pm1,\pm2,...$$
+	i to vrijedi za svaku od komponenti. Svaka od komponenti je kompleksna funkcija pa vrijedi zakon komutacije i možemo pisati:
+		$$C^*(s) = R^*(s) \left[ \frac{1}{T}\suma_{n=-\infty}^\infty G(s+jn\Omega) \right]$$
+	Možemo napisati da je
+		$$G^*(s) = \frac{1}{T}\suma_{n=-\infty}^\infty G(s+jn\Omega)$$
+		$$C^*(s) = R^*(s)G^*(s) = G^*(s)R^*(s)$$
+	Formalno smo izvršili diskretizaciju kontinualnog izlaza i formalno izgubili informaciju između trenutaka odabiranja i zato nam je potrebno da poštujemo uvjete teoreme uzorkovanja. \interject{Šta smo rekli za teoremu uzorkovanja?}{Frekvencija uzorkovanja mora biti barem dva puta veća od osnovne frekvencije. Kazali smo da se perioda uzorkovanja bira po relaciji da je T=(1/2)*(2pi/omega\_0), gdje je omega\_0 kružna učestanost najvišeg harmonika u signalu koji nosi informaciju.}
+	$G^*(s)$ je diskretna prenosna funkcija. Umjesto kompleksnog lika po Laplaceovoj promjenljivoj, možemo pisati i kompleksne likove po $z$ promjenljivoj i tada je
+		$$C(z) = G(z)R(z)$$
+	pa imamo odnos $\frac{C^*(s)}{R^*(s)}$ ili $\frac{C(z)}{R(z)}$. Odnos kompleksnog lika izlaza i kompleksnog lika ulaza pri nultim početnim uslovima se naziva diskretna prenosna funkcija:
+		$$G(z) = \frac{C(z)}{R(z)}$$
+	Pošto je težinska funkcija $g(t) = \lap{G(s)}$, onda se diskretna prenosna funkcija može dobiti diskretizacijom težinske funkcije, pa je 
+		$$G(z) = \z{g(t)} = \z{g^*(t)}$$
+	Vidimo da je ono što je razlika između Laplaceove i z-transformacije da su original u vremenskom domenu i kompleksni lik u $s$ domenu jednoznačno određeni jedno drugim, a original u vremenskom domenu je jednoznačno odredio diskretnu prenosnu funkciju ali diskretna prenosna funkcija ne daje original u vremenskom domenu. Pa se može napisati da je $g^*(t) = \invz{G(z)}$ i gubimo podatak o težinskoj funkciji između trenutaka odabiranja.
+		$$G(z) = \suma_{k=0}^\infty g(kT)z^{-k}$$
+	Ako poznajemo prenosnu funkciju $G(s)$, onda moramo primijeniti inverznu Laplaceovu transformaciju i dobiti težinsku funkciju
+		$$\z{\invlap{G(s)}} = G(z)$$
+		$$G(z) = \z{G(s)}$$
+	Operaciju $*$ možemo primijeniti na proizvod dva kompleksna lika od kojih je jedan u zvijezda-formi.
+		$$C(s) = G(s)R^*(s)\ /\ ^*$$
+		$$C^*(s) = G^*(s)R^*(s)$$
+	U kontinualnim sistemima uvijek se može naći kompleksni lik izlaza kroz kompleksni lik ulaza, a u diskretnim funkcijama postoje strukture kod kojih je to moguće i postoje strukture kod kojih je nemoguće.
+	
+	\subsection*{Primjeri struktura}
+	
+	\begin{fbd}
+		\coordinate (in) {};
+		\pic[right=1cm of in] (odab1) {odabirac};
+		\node[block, right=1cm of odab1-east] (g1) {$G_1(s)$};
+		\pic[right=1cm of g1] (odab2) {odabirac};
+		\node[block, right=1cm of odab2-east] (g2) {$G_2(s)$};
+		\coordinate[right=1cm of g2] (out) {};
+		
+		\draw (in) -- node{$r(t)$} (odab1-west) (odab1-east) edge[->] (g1)(g1) --node{$m(t)$} (odab2-west) (odab2-east) edge[->] (g2)(g2) edge[->] node{$c(t)$} (out);
+	\end{fbd}
+
+	\begin{alignat*}{2}
+		M(s) &= G_1(s) R^*(s)&/\ ^* \\
+		C(s) &= G_2(s) M^*(s)&/\ ^* \\[5pt]
+		M^*(s) &= G_1^*(s) R^*(s) \\
+		C^*(s) &= G_2^*(s) M^*(s) \\[5pt]
+		C^*(s) &= G_1^*(s) G_2^*(s) R^*(s) \\
+		C(z) &= G_1(z) G_2(z) R(z)
+	\end{alignat*}
+	
+	\begin{fbd}
+		\coordinate (in) {};
+		\pic[right=1cm of in] (odab1) {odabirac};
+		\node[block, right=0.8cm of odab1-east] (g1) {$G_1(s)$};
+		\node[block, right=1.2cm of g1] (g2) {$G_2(s)$};
+		\coordinate[right=1cm of g2] (out) {};
+		
+		\draw (in) -- node{$r(t)$} (odab1-west) (odab1-east) edge[->] (g1)(g1) edge[->] node{$m(t)$} (g2)(g2) edge[->] node[pos=1]{$c(t)$} (out);
+	\end{fbd}
+
+	\begin{alignat*}{2}
+		M(s) &= G_1(s) R^*(s) \\
+		C(s) &= G_2(s) M(s) \\
+		C(s) &= G_1(s) G_2(s) R^*(s)&/\ ^* \\[5pt]
+		C^*(s) &= [G_1(s) G_2(s)]^* R^*(s)& \\
+		C(z) &= G_1 G_2(z) R(z)
+	\end{alignat*}
+
+	\begin{fbd}
+		\coordinate (in) {};
+		\node[sum, right=1cm of in] (komp) {};
+		\pic[right=1cm of komp] (odab1) {odabirac};
+		\node[block, right=0.8cm of odab1-east] (g) {$G(s)$};
+		\node[dot, right=0.8cm of g] (cvor) {};
+		\coordinate[right=0.8cm of cvor] (out) {};
+		\node[block] (h) at ([yshift=-2cm]$(komp)!0.5!(cvor)$) {$H(s)$};
+		
+		\draw (in) --node{$r(t)$} (komp) --node{$e(t)$} (odab1-west) (odab1-east) edge[->] (g)(g) edge[->] (cvor) edge[->] node[pos=1]{$c(t)$} (out);
+		\draw[->] (cvor) |- (h)(h) -| node[pos=0.96]{$-$} (komp);
+	\end{fbd}
+
+	\begin{alignat*}{1}
+		E(s) &= R(s) - H(s)C(s) \\
+		C(s) &= G(s) E^*(s) \\
+		E(s) &= R(s) - G(s)H(s)E^*(s) \ /\ ^* \\[5pt]
+		E^*(s) &= R^*(s) - [GH]^*(s)E^*(s) \\
+		E^*(s) &= \frac{R^*(s)}{1+GH^*(s)} \\[5pt]
+		C^*(s) &= \frac{G^*(s)R^*(s)}{1+GH^*(s)}
+	\end{alignat*}
+
+	\begin{fbd}
+		\coordinate (in) {};
+		\node[sum, right=1cm of in] (komp) {};
+		\pic[right=1cm of komp] (odab1) {odabirac};
+		\node[block, right=0.8cm of odab1-east] (g) {$G(s)$};
+		\node[dot, right=0.8cm of g] (cvor) {};
+		\coordinate[right=0.8cm of cvor] (out) {};
+		\coordinate (center) at ([yshift=-2cm]$(komp)!0.7!(cvor)$) {};
+		\node[block, left=0.8cm of center] (h) {$H(s)$};
+		\pic[right=0.8cm of center, xscale=-1] (odab2) {odabirac};
+		
+		\draw (in) --node{$r(t)$} (komp) --node{$e(t)$} (odab1-west) (odab1-east) edge[->] (g)(g) edge[->] (cvor) edge[->] node[pos=1]{$c(t)$} (out);
+		\draw[->] (cvor) |- (odab2-west)(odab2-east) edge[->] (h)(h) -| node[pos=0.96]{$-$} (komp);
+	\end{fbd}
+
+	\begin{alignat*}{2}
+		E(s) &= R(s) - H(s)C^*(s) &/\ ^* \\
+		C(s) &= G(s) E^*(s) &/\ ^* \\[5pt]
+		E^*(s) &= R^*(s) - H^*(s)C^*(s) \\
+		C^*(s) &= G^*(s) E^*(s) \\[5pt]
+		E^*(s) &= R^*(s) - G^*(s)H^*(s)R^*(s) \\
+		E^*(s) &= \frac{R^*(s)}{1+G^*(s)H^*(s)} \\[5pt]
+		C^*(s) &= \frac{G^*(s) R^*(s)}{1 + G^*(s)H^*(s)}
+	\end{alignat*}
+
+	\begin{fbd}
+		\coordinate (in) {};
+		\node[block, right=1cm of in] (g1) {$G_1(s)$};
+		\pic[right=1cm of g1] (odab2) {odabirac};
+		\node[block, right=1cm of odab2-east] (g2) {$G_2(s)$};
+		\coordinate[right=1cm of g2] (out) {};
+		
+		\draw (in) edge[->] node{$r(t)$} (g1)(g1) --node{$m(t)$} (odab2-west) (odab2-east) edge[->] (g2)(g2) edge[->] node{$c(t)$} (out);
+	\end{fbd}
+
+	\begin{alignat*}{2}
+		M(s) &= R(s) G_1(s) &/\ ^* \\
+		C(s) &= G_2(s) M^*(s) &/\ ^* \\[5pt]
+		M^*(s) &= [R(s) G_1(s)]^* \\
+		C^*(s) &= G_2^*(s)M^*(s) = G_2^*(s) [R(s)G_1(s)]^*
+	\end{alignat*}
+	
+	\napomena{Ima još jedna struktura za koju je rekao da je neće pitati.}
+	
+	\section*{Predavanje 6}
+	
+	Kada izvršimo diskretizaciju težinske funkcije to se zove povorka težinske funkcije sistema. Kada vršimo diskretizaciju odziva sistema, ma kakav on bio, perioda odabiranja mora biti takva da sačuva informaciju o funkciji čiju diskretizaciju vršimo i po pravilu mora biti manja od najmanje inercione vremenske konstante sistema čiji odziv diskretizujemo. \textbf{To je još jedan uslov koji dodajemo na periodu odabiranja.}
+	
+	\subsection*{Modifikovana $\mathcal Z$-transformacija}
+	
+	Osnovni nedostatak inverzne z-transformacija je da ne možemo dobiti original $f(t)$. Dobijamo samo povorku odabiraka $f^*(t)$. Gubimo informaciju o signalu između trenutaka odabiranja. Smanjivanjem periode odabiranja mi raširujemo Nyquistovo područje i to nam povećava uticaj smetnji i šumova. Zato se uvodi modifikovana z-transformacija. Ona nam omogućava da izračunamo vrijednosti signala koji nosi informaciju između trenutaka odabiranja.
+	
+	\begin{fbd} %Blok shema mod. z transformacije
+		\coordinate (in) {};
+		\node[sum,right=1cm of in] 												(komp) {};
+		\pic[right=1cm of komp] 													(odab1) {odabirac};
+		\node[block, right=1cm of odab1-east] 						(g) {$G(s)$};
+		\node[dot, right=0.7cm of g] 											(cvor) {};
+		\coordinate[right=1cm of cvor]										(out) {};
+		\node[block] 																			(h) at ([yshift=-2cm]$(komp)!0.5!(cvor)$) {$H(s)$};
+		\node[block, above right=1cm and 0.6cm of cvor] 	(kasnj) {$e^{-T_d s}$};
+		\pic[right=1cm of kasnj, myblue] 									(odab2) {odabirac};
+		\coordinate[right=0.7cm of odab2-east] 						(dout) {};
+		
+		% Direktna grana
+		\draw (in) edge[->] node{$r(t)$} 					 (komp)
+					(komp) --node{$e(t)$}			 					 (odab1-west)
+					(odab1-east) edge[->] node{$e^*(t)$} (g)
+					(g) edge[->] 												 (cvor)
+					(cvor) edge[->] node[pos=1]{$c(t)$}  (out);
+		
+		% Povratna grana
+		\draw[->] (cvor) |- (h);
+		\draw[->] (h) -| node[pos=0.96]{$-$} (komp);
+		
+		% Grana kasnjenja
+		\draw[->, dashed, myblue] (cvor) |- (kasnj);
+		\draw[dashed, myblue] (kasnj) 					--node{$c_d(t)$} 						(odab2-west)
+													(odab2-east) edge[->] node[pos=1]{$c_d^*(t)$} (dout);
+	\end{fbd}
+
+	Ako pretpostavimo da je vrijeme čistog transportnog kašnjenja $T_d$ najviše jedna perioda uzorkovanja, onda je
+		$$T_d = \alpha T,\ 0<\alpha\le1$$
+	Tada je naš signal poslije bloka kašnjenja
+		$$c_d(t) = c(t-\alpha T)$$
+	Diskretizacijom ovog zakašnjelog signala mi možemo z-transformacijom i inverznom z-transformacijom izračunati odabirak između trenutaka odabiranja. Umjesto $\alpha$ je uveden koeficijent modifikovane z-transformacije: $m = 1-\alpha,\ 0\le m < 1$.
+	Modifikovana z-transformacija signala $c(t)$ je z-transformacija zakašnjelog signala. On je
+		$$c_d(t) = c(t-\alpha T) = c[t-(1-m)T]$$
+	Piše se
+		$$\z{c_d(t)} = \zm{c(t)},\ m=1-\alpha,\ 0 \le m < 1$$
+	U kompleksnom domenu ovo se piše kao
+		$$C(z,m) = \zm{c(t)} = \z{c[t-(1-m)T]},\ 0 \le m < 1$$
+	Inverzna modifikovana z-transformacija se piše kao:
+		$$c[(n+m-1)T] = \invz{C_d(z)} = \invzm{C(z,m)}$$
+	Ako odemo na kompleksne oblike onda imamo:
+		$$F(z) = \z{f^*(t)} = \frac{1}{2\pi j} \oint\limits_C \frac{F(p)z}{z-e^{pT}}\ \text dp$$
+		$$f(kT) = \frac{1}{2\pi j} \oint\limits_C F(z) z^{k-1}\ \text dz$$
+		$$f_d(t) = f[t-(1-m)T]$$
+	Ako $f(t)$ ima kompleksni lik u $s$ domenu $F(p)$, onda je
+		$$F_d(p) = F(p) \cdot e^{-(1-m)pT}$$
+		$$F(z,m) = \zm{f(t)} = \z{f[t-(1-m)T]} = \frac{1}{2\pi j} \oint\limits_C \frac{e^{-(1-m)pT}F(p)z}{z-e^{pT}}\ \text dp$$
+	Pošto je $e^{-pT} = z^{-1}$, imamo
+		$$F(z,m) = \frac{1}{2\pi j} \oint\limits_C \frac{e^{mpT}F(p)}{z-e^{pT}}\ \text dp$$
+	Zatvorena kontura $C$ mora obuhvatati polove podintegralne funkcije $F(p)$ i stepen polinoma u nazivniku kompleksnog lika $F(p)$ mora biti barem za 1 veći od stepena polinoma u brojniku. Inverzna modifikovana z-transformacija nam kaže da ćemo dobiti vrijednosti originala funkcije
+		$$f[(n+m-1)T] = \frac{1}{2\pi j} \oint\limits_C z^{n-1} F(z,m)\ \text dz,\ 0\le m < 1$$
+	
+	\subsection*{Digitalni sistemi sa transportnim kašnjenjem}
+	
+	Svi tehnološki procesi imaju u sebi inherentno sadržano kašnjenje. Ako se radi o digitalnim sistemima, procesor mora raditi u realnom vremenu. Kada u sistemu imamo kašnjenje a radi se o linearnim kontinualnim sistemima, onda transportno kašnjenje nam uvijek otežava analizu i sintezu, zatim zakreće amplitudno fazne karakteristike i ugrožava stabilnost. Sistemi moraju biti stabilni. I treće, svaka pojava kašnjenja usporava brzinu odziva. Svi ovi problemi u digitalnim sistemima su daleko manje izraženi. Transportno kašnjenje možemo zanemariti ako je manje od periode uzorkovanja.
+	
+	\begin{fbd}
+		\tikzstyle{block} = [draw, fill=gray!15, rectangle, minimum height=3em, minimum width=4.5em]
+		
+		\coordinate (in) {};
+		\node[sum,right=0.9cm of in] (komp) {};
+		\pic[right=0.8cm of komp] (odab1) {odabirac};
+		\node[block, right=0.9cm of odab1-east] (d) {$D(z)$};
+		\pic[right=0.8cm of d] (odab2) {odabirac};
+		\node[block, right=0.9cm of odab2-east] (da) {D/A};
+		\node[block, right=0.9cm of da] (kasnj) {$e^{-T_d s}$};
+		\node[block, right=0.9cm of kasnj] (g) {$G(s)$};
+		\node[dot, right=0.9cm of g] (cvor) {};
+		\coordinate[right=0.9cm of cvor] (out) {};
+		\coordinate[below=2cm of cvor] (knee) {};
+		
+		\draw (in) edge[->] node{$r(t)$} (komp)
+					(komp) -- 								 (odab1-west)
+					(odab1-east) edge[->] 		 (d)
+					(d) -- 										 (odab2-west)
+					(odab2-east) edge[->]			 (da)
+					(da) edge[->] 						 (kasnj)
+					(kasnj) edge[->] 					 (g)
+					(g) edge[->] 					 		 (cvor)
+					(cvor) edge[->]						 (out);
+		\draw[->] (cvor) |- (knee) -| (komp);
+	\end{fbd}
+	
+	Diskretna prenosna funkcija prenosne grane je:
+		$$W(z) = D(z) \cdot \z{\frac{1-e^{-sT}}{s} \cdot e^{-T_d s} \cdot G(s)}$$
+	Pretpostavit ćemo da je vrijeme ukupnog kašnjenja $T_d < T$. U ovim sistemima se isključivo primjenjuje modifikovana z-transformacija. Ako je $T_d << T$ i uvedemo oznaku $\frac{G(s)}{s} = G_s(s)$ onda je:
+		$$W(z) = D(z) \cdot (1-z^{-1}) \cdot G_s(z,m)\rvert_{m=1-\frac{T_d}{T}} = D(z) \cdot (1-z^{-1}) \cdot G_s\left(s,1-\frac{T_d}{T}\right)$$
+	Karakteristična jednačina glasi:
+		$$1+W(z) = 0$$
+		$$z + D(z)\cdot(z-1)\cdot G_s\left( z, 1-\frac{T_d}{T} \right) = 0$$
+	Pomoću ove karakteristične jednačine se vrši analiza u $z$ domenu. Ako je $T_d > T$ možemo napisati da je $T_d = nT + \lambda T,\ 0 \le \lambda < 1$. Prenosna funkcija sada glasi:
+		$$W(z) = D(z) \cdot (1-z^{-1}) \cdot \z{e^{-nTs}G_s(s)e^{-\lambda Ts}} = D(z) (1-z^{-1}) z^{-n} G_s(z,1-\lambda)$$
+	
+	\noindent \hdashrule{\linewidth}{0.6pt}{4pt}
+	
+	\subsection*{Realizacija i osobine funkcije diskretnog prenosa}
+	
+	Zadatak funkcije diskretnog prenosa jeste da pri zadatoj povorci ulaza generišemo povorku dijela sistema kojim upravljamo i to takvu da na izlazu dobijemo povorku odabiraka upravljačkih instrukcija koja će sistem prevesti u tehnologijom definisano stanje. Ovaj zadatak se realizuje jednim od tri algoritma:
+	\begin{itemize}
+		\item Konvolucionim,
+		\item Rekurzivnim,
+		\item DFT algoritmom.
+	\end{itemize}
+
+	\subsubsection*{Konvolucioni algoritam na primjeru digitalnog filtera}
+	
+	\begin{fbd}
+		\coordinate (in) {};
+		\node[block, right=1.3cm of in] (h) {$H(z)$};
+		\coordinate[right=1.3cm of h] (out) {};
+		
+		\draw[->] (in) -- node[above]{$R(z)$} node[below]{$r^*(t)$} (h);
+		\draw[->] (h) -- node[above]{$C(z)$} node[below]{$c^*(t)$} (out);
+	\end{fbd}
+	
+	Imamo osobinu konvolucije
+		$$c(nT) = \suma_{m=0}^n h(mT) r(nT-mT),\ n=0,1,2,...$$
+	Ta povorka treba sistem da dovede u tehnologijom definisano stanje. Za svaki odabirak izlaza u trenutku $t=nT$ nama su potrebni odabirci ulaza $r(0),r(T),...,r[(n-1)T]$.
+	Izlaz je određen u trenutku $t=nT$ i ta povorka se množi koeficijentima koji su određeni diskretnom prenosnom funkcijom digitalnog filtera. Kada bi ulaz bio jedinični odabirak, onda bi izlaz bio $h(0), h(T), h(2T),...$ Ove programe možemo primijeniti na slučajeve kada je impulsna povorka sistema ograničena. To znači da odabirci egzistiraju za $N_1 \le k \le N_2$. Ako amplituda u impulsnoj povorci odabiraka opada, npr. $h(kT) = k^n,\ |k|<1$. Strogo gledano ovaj slučaj nije moguće realizirati zato što se u konvoluciji javlja jako mnogo članova. Sve ovo ima smisla kada se radi o stabilnim procesorima. Stabilan procesor je onaj kod kojeg za sve konačne vrijednosti odabiraka na ulazu dobijamo konačne vrijednosti odabiraka na izlazu. Tada je
+		$$\suma_{k=0}^\infty |h(kT)| < \infty$$
+	
+	\noindent \hrule
+	\newpage
+	\section*{Pitanja i odgovori}
+	\subsection*{Prva parcijala}
+	\header{Predavanje 1} %%%Prvo predavanje%%%
+	\begin{enumerate}
+		\item \textbf{Šta je kvantni nivo $\Delta y$, šta mora zadovoljavati i šta su ograničenja?} \ispit %TODO provjeriti
+		\begin{answer}
+			Kvant $\Delta y$ predstavlja razliku između dva susjedna kvantna nivoa i konstantan je. Mora postojati dovoljan broj kvantnih nivoa  tj. kvant $\Delta y$ mora biti dovoljno mali kako bi vrijednost kvantnih odabiraka bila približno jednaka kontinualnom signalu. Zbog konačne veličine ...
+		\end{answer}
+		\item \textbf{Šta je kvantni nivo, kako ga odabiramo i šta mora biti zadovoljeno pri odabiru?} \ispit
+		
+		\begin{answer}
+			Kvantni nivo je unaprijed zadana vrijednost koju kontinualni signal treba da dostigne. Kako bismo sačuvali informaciju broj kvantnih nivoa treba biti što veći. Ako je broj kvantnih nivoa dovoljno velik može se reći da je $f(t) = f(kT)$ za $k=0,1,2,...$. Prilikom dovođenja kontinualnog signala na ulaz AD konvertora vrijednost ulaznog signala na jednoj periodi uzorkovanja ne smije se mijenjati više od jednog kvantnog nivoa. U slučaju da se mijenja moramo ga prvo dovesti na kolo zadrške kako bi se vrijednost signala zadržala na narednoj periodi uzorkovanja $kT\le t < (k+1)T$. U slučaju da se mijenja manje od jednog kvantnog nivoa, možemo kontinualni signal direktno dovesti na ulaz AD konvertora.
+		\end{answer}
+		
+		\item \textbf{Kada procesor radi u realnom vremenu?} \ispit
+
+		\begin{answer}
+			Digitalni računar mora raditi u realnom vremenu - odabirak upravljačke instrukcije se mora generisati po zadatom algoritmu upravljanja prije pristizanja narednog odabirka na ulaz. Izračunavanje odabirka upravljačke instrukcije mora se završiti prije isticanja te periode uzorkovanja i taj odabirak vrijedi na toj periodi. Određivanje odabirka upravljačke instrukcije mora biti kraće od periode uzorkovanja. Ukoliko upravljamo sa više tehnoloških veličina, određivanje odabirka upravljačke instrukcije za svaku od veličina se mora završiti unutar iste periode uzorkovanja.
+		\end{answer}
+			
+		\item \textbf{Šta je perioda uzorkovanja, šta mora zadovoljavati i šta su ograničenja?} \ispit
+		
+		\begin{answer}
+			Perioda uzorkovanja $T$ je vremenski interval između dva susjedna trenutka odabiranja i obično radimo sa konstantnom periodom uzorkovanja. Uslovi koje mora zadovoljavati:
+			\begin{enumerate}[1.]
+				\item Mora biti takva da sačuva informaciju o originalu,
+				\item Mora biti manja od najmanje inercione vremenske konstante sistema na čijem se izlazu vrši diskretizacija,
+				\item Mora biti takva da promjena signala nije veća od jednog kvantnog nivoa,
+				\item Mora biti takva da zadovoljava Nyquistovu teoremu učestanosti (smanjenjem periode uzorkovanja širimo Nyquistovo područje učestanosti pa se povećava uticaj smetnji i šumova),
+				\item Veliko $T$ negativno utiče na pitanje stabilnosti sistema.
+			\end{enumerate}
+			Periodu uzorkovanja biramo u odnosu na kvant tako da promjena signala na narednoj periodi uzorkovanja ne bude veća od jednog kvantnog nivoa. Periodu uzorkovanja biramo u odnosu na realnu dinamiku sistema tako da ona bude manja od najmanje inercione vremenske konstante sistema.
+		\end{answer}
+		
+		\item \textbf{Kako biramo periodu uzorkovanja u odnosu na kvant $\Delta y$, a kako u odnosu na dinamiku sistema kojim upravljamo?} \ispit
+		
+		\begin{answer}
+			Periodu uzorkovanja biramo u odnosu na kvant $\Delta y$ tako da promjena signala na narednoj periodi uzorkovanja nije veća od jednog kvantnog nivoa. Periodu uzorkovanja biramo u odnosu na realnu dinamiku sistema tako da ona bude manja od najmanje inercione vremenske konstante sistema. Odabir velike periode uzorkovanja $T$ u odnosu na realnu dinamiku sistema ima negativan uticaj na stabilnost sistema.
+		\end{answer}
+		
+		\item \textbf{Nacrtajte elementarnu strukturu upravljanja u DSU, objasnite šta su pojedini elementi i razdvojite kontinualni i diskretni dio.} \ispit
+		\begin{fbd}[Struktura upravljanja]
+			\tikzstyle{sblock} = [block, minimum width=5em]
+			\scalebox{0.9}{
+			\node (in) at (-10,0) {};
+			\node[sum, right=1.2cm of in] (komp) {};
+			\pic[right=0.7cm of komp] (odab1) {odabirac};
+			\node[block, right=0.7cm of odab1-east] (prog) {Program};
+			\pic[right=0.7cm of prog] (odab2) {odabirac};
+			\node[sblock, right=0.7cm of odab2-east] (kasnj) {$e^{-T_d s}$};
+			\node[sblock, minimum width=4em, right=0.7cm of kasnj] (da) {D/A};
+			\node[block, right=0.7cm of da] (obj) {Objekat};
+			\node[dot, right=0.7cm of obj] (cvor) {};
+			\node[right=0.7cm of cvor] (out) {};
+			
+			\draw[->] (in) -- node[pos=0.3] {$r(t)$} (komp);
+			\draw (komp) -- (odab1-west);
+			\draw[->] (odab1-east) -- (prog);
+			\draw (prog) -- (odab2-west);
+			\draw[->] (odab2-east) -- (kasnj);
+			\draw[->] (kasnj) -- (da);
+			\draw[->] (da) -- (obj);
+			\draw[->] (obj) -- (cvor);
+			\draw[->] (cvor) -- node[midway] {$c(t)$} (out);
+			\draw[draw=none] (komp) -- node[block, below=2cm of prog, midway] (det) {Detektor} (cvor);
+			\draw[->] (cvor) |- (det);
+			\draw[->] (det) -| node[pos=0.96] {$-$} (komp);
+			
+			%Box
+			\coordinate (gl) at ([shift={(-0.3cm,1cm)}]komp.west);
+			\coordinate (dd) at ([shift={(0.3cm,-1cm)}]kasnj.east);
+			\draw[dashed] (gl) rectangle node[anchor=south, yshift=1cm] {Digitalni računar ili mikroprocesor} (dd);
+			} %scalebox
+		\end{fbd}
+		
+		\begin{answer}
+			$r(t)$ predstavlja ulazni signal koji je kontinualan.\\[5pt]
+			\textbf{Komparator} poredi ulazni signal i signal na izlazu detektora, formira regulacionu grešku. \\[5pt]
+			\textbf{Odabirač $S$} -- Vrši uzorkovanje regulacione greške i daje povorku odabiraka regulacione greške. \\[5pt]
+			\textbf{Procesor} -- izračunava odabirke upravljačke instrukcije na osnovu zadatog algoritma upravljanja, mora raditi u realnom vremenu. \\[5pt]
+			$e^{-T_d s}$ -- blok čistog transportnog kašnjenja u koje ulazi uzimanje odabiraka, zadržavanje odabiraka na narednoj periodi uzorkovanja, prevođenje u digitalnu riječ i vrijeme izračunavanja odabiraka upravljačkih instrukcija po zadatom algoritmu upravljanja. \\[5pt]
+			\textbf{D/A konvertor} -- Digitalni signal (povorku odabiraka) pretvara u kontinualni signal. Također mu je zadaća da ukloni ili u potrebnoj mjeri priguši komplementarne harmonike. \\[5pt]
+			\textbf{Objekat upravljanja} ima sljedeću strukturu:
+			\begin{fbdc}[Objekat upravljanja]
+				\node [coordinate, name=input] {};
+				\node [block, right=1cm of input, name=psnage] {Pojačalo \\ snage};
+				\node [block, right=1cm of psnage, name=io] {Izvršni\\ organ};
+				\node [block, right=1cm of io, name=proces] {Proces};
+				\node [name=output, right=1cm of proces] {};
+				
+				\draw [->] (input) -- (psnage);
+				\draw [->] (psnage) -- (io);
+				\draw [->] (io) -- (proces);
+				\draw [->] (proces) -- (output);
+			\end{fbdc}
+			Izlaz sa D/A konvertora je niskog energetskog nivoa pa se mora dovesti na pojačalo snage ili na naponsko-strujni pretvarač. Dalje se vodi na izvršni organ sa ili bez servo motora pa onda na sam proces. \\[5pt]
+			\textbf{Detektor} -- Mjeri izlazni signal i pretvara ga u neki od standardnih mjernih signala. \\[5pt]
+			$c(t)$ -- izlazni signal koji je kontinualan.
+		\end{answer}
+		
+		\noindent \hdashrule{\linewidth}{0.4pt}{3pt}
+		
+		\item \textbf{Koje se diskretizacije vrše u digitalnim sistemima i koje su prednosti digitalnih sistema?} \zplus
+		
+		\begin{answer}
+			Vrše se sljedeće diskretizacije:
+			\begin{itemize}
+				\item Diskretizacija po nivou. Zadaju se unaprijed fiksirani nivoi koje signal treba da dostigne.
+				\item Diskretizacija po vremenu. Biraju se fiksni trenuci uzimanja odabiraka.
+				\item Diskretizacija i po nivou i po vremenu se koristi u DSU.
+			\end{itemize}
+		\end{answer}
+		
+		\item \textbf{Šta je $\Delta y$, zašto je bitno?} \zplus %TODO ove god?
+		
+		
+		\begin{answer}
+			$\Delta y$ predstavlja kvant, u diskretizaciji i po nivou i po vremenu pojedini diskretni nivoi posjeduju cjelobrojne vrijednosti kvanta $\Delta y$. Vrijednost signala se uzima u trenutku odabiranja i ona iznosi cijeli broj kvanata, uzima se onaj kvantni nivo koji je bliži nivou odabirka.
+		\end{answer}
+	
+		\item \textbf{Šta još procesor može da radi u međuvremenu?} \zplus 
+		
+		\begin{answer}
+			Kada računar izračuna odabirak upravljačke instrukcije možemo ga pustiti da miruje i obično se daju neke druge zadaće da obavlja do isteka periode upravljanja:
+			\begin{addmargin}[10pt]{0pt}
+				\begin{enumerate}[1.]
+					\item Obrada mjernih signala, {\small\interject{Šta to znači?}{Senzor mjeri i računa te podatke.}}\vspace{-5pt}
+					\item Procjena upravljačkih instrukcija (to znači narednog odabirka), {\small\interject{Kako se vrši ta procjena?}{Procjena narednog odabirka upravljačke instrukcije se vrši na osnovu prethodnih odabiraka.}}
+					\item Identifikacija procesa,
+					\item Izračunavanje podataka za naredni odabirak u kojima učestvuju do tada poznati podaci,
+					\item Adaptacija parametara.
+				\end{enumerate}
+			\end{addmargin}
+		\end{answer}
+		
+		\item \textbf{Šta je odabirak?} \zplus
+		
+		\begin{answer}
+			Odabirak je vrijednost signala u trenutku odabiranja $t=kT$, $k=0,1,2,...$ i ima konstantnu vrijednost. Uzima se bliža vrijednost cijelom broju kvantnih nivoa. Ukoliko je kvantni nivo dovoljno mali tada možemo reći da je vrijednost signala $f(t)$ u trenutku uzorkovanja $t=kT$ upravo $f(kT)$.
+		\end{answer}
+	
+		\item \textbf{Koji je prvi uvjet koji se nameće na obradu signala?} \zplus
+			\begin{answer}
+				Kada smo uzeli kontinualnu funkciju i izvršili njenu diskretizaciju i po nivou i po vremenu, tom diskretizacijom moramo sačuvati informaciju koju ona nosi. To ocjenjujemo iz njenog kompleksnog lika ili frekventnih karakteristika.
+			\end{answer}
+		\item \textbf{Koje su prednosti digitalnih sistema upravljanja?} \zplus
+		
+		\begin{answer}
+			Prednosti DSU:
+			\begin{itemize}
+				\item Manji uticaj smetnji i šumova,
+				\item Isti element upravljanja se može koristiti za upravljanje sa više tehnoloških veličina,
+				\item Isti spojni put možemo koristiti za više tehnoloških veličina.
+			\end{itemize}
+		\end{answer}
+		\item \textbf{\color{mypink}Zašto radimo ovaj kurs?} \zplus
+		
+		\begin{answer}
+			Postoje 3 razloga zašto se radi ovaj kurs:
+			\begin{itemize}
+				\item \textit{Smanjenje uticaja šuma i smetnji na sistem.} Smetnje i šumovi utiču na sistem negativno. Cilj je da umanjimo njihov uticaj zbog boljeg upravljanja, zato što aw kontinualne funkcije prenose u cijelosti, pa se šumovi i smetnje superponiraju i povećavaju sa rastojanjem.
+				\item Možemo istovremeno upravljati sa više različitih tehnoloških veličina jer upravljamo digitalnim računarom, pa koristimo komutator tako da u jednoj periodi uzorkovanja možemo obraditi $n$ različitih tehnoloških veličina koje dovodimo na ulaz komutatora (npr. pritisak, nivo, temperatura). Obilježili smo ih sa $f(t)$ i one se u LSAU prenose u cijelosti.
+			\end{itemize}
+		\end{answer}
+		
+		\item Koje veličine imamo u osnovnoj strukturi automatskog upravljanja?
+		
+		\begin{answer}
+			Imamo ulaz (zadanu vrijednost $r(t)$), izlaz $c(t)$ i regulacionu grešku $e(t)$ i sve su vremenske funkcije.
+		\end{answer}
+	
+		\item Kada upravljamo sa više tehnoloških parametara, koji uslov se nameće?
+		\begin{answer}
+			Unutar jedne periode uzorkovanja se mora obaviti svih $n$ komutacija. Komutator na ulazu i komutator na izlazu moraju biti sinhronizovani.
+		\end{answer}
+		
+		\item \textbf{Zašto kvant mora biti konstatan?} \zplus
+		\begin{answer}
+			Da bismo imali cijeli broj kvantnih nivoa i time se oklanjaju smetnje i šumove. Prilikom diskretizacije po nivou se uzima cijeli broj kvantnih nivoa koji je najbliži vrijednosti signala.
+		\end{answer}
+	
+		\item Kako se vrši procjena narednog odabirka upravljačke instrukcije? \zplus
+		\begin{answer}
+			Procjena se vrši na osnovu prethodnih odabiraka. Matematski aparat koji koristimo su diferentne jednačine.
+		\end{answer}
+	
+		\item Šta je komparator? \zplus
+		\begin{answer}
+			Komparator upoređuje (oduzima) zadanu vrijednost i vrijednost koju nam daje detektor.
+		\end{answer}
+		
+		\item Zašto se zovu digitalni sistemi upravljanja? \zplus
+		\begin{answer}
+			Zato što tehnološkim postrojenjem upravljamo digitalnim upravljačkim dijelom, tj. digitalnim računarom (programom, procesorom).
+		\end{answer}
+	
+		\item \textbf{Gdje se u sistemu pojavljuje digitalna riječ?} \zplus %TODO provjeriti odgovor
+		
+		\begin{answer}
+			Digitalna riječ se može pojaviti na izlazu pretvarača, na izlazu detektora, na ulazu i izlazu digitalnog računara, te na ulazima i izlazu komparatora. \textbf{Pitati prof. šta fali}
+		\end{answer}
+	
+		\item Šta je analiza? \zplus
+		\begin{answer}
+			Analiza je određivanje matematskog opisa nekog sistema.
+		\end{answer}
+	
+		\item Šta je sinteza? \zplus
+		\begin{answer}
+			Sinteza je određivanje strukture i parametara regulatora.
+		\end{answer}
+	
+		\item Zašto se zovu DSU? \zplus
+		\begin{answer}
+			Zato što tehnološkim postrojenjima upravljama digitalnim upravljačkim dijelom tj. digitalnim računarom (programom, procesorom, kontrolerom, digitalnim regulatorom).
+		\end{answer}
+	
+	\end{enumerate}
+	\header{Predavanje 2} %%%Drugo predavanje%%%
+	\begin{enumerate}
+		\item \textbf{Šta je brzina uzimanja odabiraka i čime je određujemo?} \ispit
+		\begin{answer}
+			Brzina uzimanja odabiraka je gustina uzimanja odabiraka i što su odabirci gušći kvantovanje po vremenu je češće, perioda uzorkovanja je manja i bolja je aproksimacija kontinualnog signala $f(t)$ stepenastim signalom. Određujemo je periodom uzorkovanja.
+		\end{answer}
+		\item \textbf{\color{mypink}Šta je kružna učestanost odabiranja $\Omega = \frac{2\pi}{T}$, šta mora zadovoljavati i šta su ograničenja?} \ispit
+		
+		\item \textbf{Šta je $F(p)$ i šta mora zadovoljavati?} \ispit
+		
+		\begin{answer}
+			$F(p)$ je Laplaceova transformacija originala koji nosi informaciju. $F(p)$ mora ispunjavati Dirichletove uvjete:\\[5pt]
+			Na konačnom intervalu $(a,b)$ funkcija $f(t)$ može imati:
+			\begin{itemize}
+				\item konačan broj minimuma i maksimuma,
+				\item mora biti neprekidna ili imati konačan broj prekida prve vrste
+			\end{itemize}
+			i mora zadovoljavati uslov apsolutne konvergencije, tj. sljedeći integral mora imati konačnu vrijednost:
+				$$I=\int_{-\infty}^\infty |f(t)|\ \text dt < M < \infty$$
+			Za funkciju koja zadovoljava ove uslove kažemo da pripada klasi funkcija tipa početnih uslova. \\[5pt]
+			Također ako pogledamo prvi oblik kompleksnog lika povorke odabiraka $F^*(s)$ primijetiti ćemo da je za njegovo računanje potrebno poznavanje signala $f(t)$ u vremenskom domenu, odnosno vrijednosti tog signala $f(kT)$ u trenucima odabiranja. Ponekad su od interesa postupci izračunavanja $F^*(s)$ na osnovu $F(s)$. Takve postupke omogućava teorema o konvoluciji u kompleksnom području:
+				$$F^*(s) = \lap{f(t)i(t)} = \frac{1}{2\pi j} \int_{\gamma-j\infty}^{\gamma+j\infty} F(p) I(s-p)\ \text dp$$
+			$I(p)$ je Laplaceova transformacija povorke idealnih delta funkcija. Ove dvije podintegralne funkcije su u domenu Laplaceove promjenljive. Da bi se ovaj integral mogao odrediti mora postojati prava Re$(p)=\gamma$ koja će razdvajati singularitete tipa polova podintegralnih funkcija. Ako imamo povorku delta funkcija uzimamo da ide od nule zbog kauzalnosti, Laplaceova transformacija delta funkcije je 1 i pošto su pomjerene množimo ih sa $e^{-kTs}$, pa je kompleksni lik povorke delta funkcija jednak:
+				$$I(s) = \suma_{k=0}^\infty e^{-kTs} = \frac{1}{1-e^{-Ts}}$$
+			Ovu sumu možemo odrediti ako se radi o geometrijskoj progresiji uz uslov da je $\left| e^{-Ts} \right| < 1$, dakle Re$(s)>0$. Znači postojat će prava Re$(p) = \gamma$ koja će razdvojiti singularitete tipa polova podintegralnih funkcija ako je Re$(s)>0$. Imaginarna komponenta daje oscilatornost, a realna daje prigušenje. $F(p)$ mora biti sastavljena od komponenti koje moraju imati prigušenje ili eksponencijalno opadajuće funkcije. U tom slučaju polovi moraju ležati u lijevoj poluravni kompleksne ravni $\{p\}$, da bi imalo tehničkog smisla. $I(s-p)$ će imati polove u desnoj poluravni kompleksne ravni $\{p\}$. Prava Re$(p)=\gamma$ tada očigledno egzistira i prolazi kroz I i IV kvadrant i paralelna je imaginarnoj osi i razdvojit će singularitete tipa polova podintegralnih funkcija.
+		\end{answer}
+		
+		\item \textbf{Objasnite relaciju, šta su pojedine veličine i šta treba biti zadovoljeno:} \ispit
+			$$F^*(s) = \frac{1}{2\pi j} \int_{\gamma-j\infty}^{\gamma+j\infty} F(p) I(s-p)\ \text dp$$
+		\begin{answer}
+			Nedostatak prvog oblika kompleksnog lika povorke odabiraka je što moramo znati original $f(t)$ u vremenskom domenu ili vrijednosti signala u trenucima odabiranja $f(kT)$, a nama često treba samo $F^*(s)$ na osnovu poznavanja $F(s)$. Zbog toga koristimo ovu relaciju koja nam omogućava da sračunamo vrijednost kompleksnog lika povorke odabiraka na osnovu kompleksnog lika originala. \\[5pt]
+			Data relacija predstavlja konvolucioni integral u domenu Laplaceove transformacije. $F^*(s)$ predstavlja kompleksni lik povorke odabiraka $f^*(t)$, $F(p)$ je kompleksni lik originala $f(t)$, $I(s-p)$ je kompleksni lik povorke idealnih delta funkcija. Da bi se ovaj integral mogao odrediti mora postojati prava $\text{Re}(p) = \gamma$ koja razdvaja singularitete tipa polova podintegralnih funkcija. Polovi funkcije $F(p)$ moraju ležati u lijevoj poluravni kompleksne ravni $\{p\}$. Ti polovi mogu biti realni, različiti, jednostruki, višestruki i u obliku konjugovano kompleksnih parova. Polovi funkcije $I(s-p)$ moraju ležati u dijelu kompleksne ravni $\{p\}$ desno od prave Re$(p) = \gamma$. Da bismo odredili polove, moramo riješiti karakterističnu jednačinu:
+				$$1-e^{-T(s-p)} = 0$$
+			Rješenja ove jednačine određuju polove kompleksnog lika $I(s-p)$ koji se multipliciraju sa periodom $j\Omega$ do beskonačnosti.
+		\end{answer}
+		
+		\item \textbf{Dato je:} $$F^*(s) = \sum_{k=0}^\infty f(kT) e^{-kTs}$$
+			$$F^*(s) = \frac{1}{2\pi j} \int_{\gamma-j\infty}^{\gamma+j\infty} F(p)I(s-p)\ \text dp$$
+		\textbf{Šta su pojedine veličine? Nacrtajte raspored polova u ravni $\{p\}$.} \ispit
+		\begin{answer}
+			Prva relacija predstavlja prvi oblik kompleksnog lika povorke odabiraka. \\[5pt]
+			Pojedine veličine:
+			\begin{eqnarray*}
+				f(kT) &-& \text{vrijednosti originala u trenucima odabiranja} t=kT,\ k=0,1,... \\
+				F^*(s) &-& \text{kompleksni lik povorke odabiraka } f^*(t) \\
+				T &-& \text{perioda uzorkovanja u vremenskom domenu} \\
+				s &-& \text{Laplaceova kompleksna promjenljiva}
+			\end{eqnarray*}
+	 		Nedostatak prvog oblika kompleksnog lika povorke odabiraka je što moramo znati original $f(t)$ u vremenskom domenu ili vrijednosti signala u trenucima odabiranja $f(kT)$, a nama često treba samo $F^*(s)$ na osnovu poznavanja $F(s)$. Zbog toga koristimo ovu relaciju koja nam omogućava da sračunamo vrijednost kompleksnog lika povorke odabiraka na osnovu kompleksnog lika originala. \\[5pt]
+			Druga relacija predstavlja konvolucioni integral u domenu Laplaceove transformacije. $F^*(s)$ predstavlja kompleksni lik povorke odabiraka $f^*(t)$, $F(p)$ je kompleksni lik originala $f(t)$, $I(s-p)$ je kompleksni lik povorke idealnih delta funkcija. Da bi se ovaj integral mogao odrediti mora postojati prava $\text{Re}(p) = \gamma$ koja razdvaja singularitete tipa polova podintegralnih funkcija. Polovi funkcije $F(p)$ moraju ležati u lijevoj poluravni kompleksne ravni $\{p\}$. Ti polovi mogu biti realni, različiti, jednostruki, višestruki i u obliku konjugovano kompleksnih parova. Polovi funkcije $I(s-p)$ moraju ležati u dijelu kompleksne ravni $\{p\}$ desno od prave Re$(p) = \gamma$. Da bismo odredili polove, moramo riješiti karakterističnu jednačinu:
+			 $$1-e^{-T(s-p)} = 0$$
+			Rješenja ove jednačine određuju polove kompleksnog lika $I(s-p)$ koji se multipliciraju sa periodom $j\Omega$ do beskonačnosti.
+		\end{answer}
+		
+		\item \textbf{Navedite sve operacije koje su inherentno sadržane u diskretizaciji kontinualnog signala. Objasnite ih.} \ispit
+		
+		\begin{answer}
+			U diskretizaciji kontinualnog signala su inherentno sadržane dvije operacije: proces odabiranja i zadrška. Ako je kvantni nivo dovoljno mali onda možemo smatrati da je cijeli broj kvantnih nivoa u svakom trenutku uzorkovanja jednak vrijednosti signala u trenutku uzorkovanja. Na ulaz A/D konvertora se dovodi signal. Ako je brzina promjene signala mala, što znači da je promjena na narednoj periodi uzorkovanja manja od jednog kvantnog nivoa, signal se može direktno dovesti na A/D konvertor. Ako je promjena kontinualnog signala na narednoj periodi veća od jednog kvantnog nivoa onda se vrijednost odabirka u tom trenutku uzorkovanja zadržava konstantnim na narednoj periodi uzorkovanja. Pa se uzima odabirak $f(kT)$ i zadržava konstantnim za $kT\le t < (k+1)T$. To rade kola zadrške. Imamo stepenasti signal $f_h(t)$. Ako ovaj signal ne sadrži impuls u bilo kojem trenutku odabiranja, tada se $f_h(t)$ može izraziti zbirom pravougaonih signala trajanja $T$ i amplituda $f(kT)$, $k=0,\pm1,...$
+				$$f_h(t) = \suma_{k=-\infty}^\infty f(kT)\{h(t-kT)-h[t-(k+1)T]\}$$
+			gdje je $h(t)$ Heavisideov signal u trenutku $t=0$. Pa imamo uzimanje odabirka $f(kT)$, zadržavanje te vrijednosti na narednoj periodi uzorkovanja jer ne smije biti promijenjen signal na toj periodi uzorkovanja dok traje proces konverzije (prevođenja u binarni kod) a to je u toku jedne periode uzorkovanja jer procesor mora raditi u realnom vremenu. Procesor će uzeti odabirak regulacione greške i po zadatom algoritmu upravljanja generisati odabirak upravljačke instrukcije prije pristizanja narednog odabirka na ulaz.
+		\end{answer}
+		
+		\noindent \hdashrule{\linewidth}{0.4pt}{3pt}
+		
+		\item \textbf{Vrijeme kašnjenja $T_d$?} \zplus %TODO ove god?
+		\begin{answer}
+			$T_d$ je vrijeme kašnjenja i u njemu je sadržano: vrijeme uzimanja odabirka, zadržavanje tog odabirka na narednoj periodi uzorkovanja (tj. memorisanje), vrijeme kodiranja (prevođenje u digitalnu riječ) i vrijeme izračunavanja odabirka upravljačke instrukcije po zadatom algoritmu upravljanja i taj odabirak vrijedi na narednoj periodi uzorkovanja.
+		\end{answer}
+		
+		\item Šta je glavni nedostatak prvog oblika kompleksnog lika povorke odabiraka? \zplus
+		\begin{answer}
+			Moramo poznavati čitavu funkciju $f(t)$ ili njene odabirke $f(kT)$.
+		\end{answer}
+	
+		\item Šta je $f(t)$?
+		\begin{answer}
+			$f(t)$ je kontinualni signal koji nosi informaciju.
+		\end{answer}
+		
+		\item Zašto smo izvršili odabiranje? \zplus
+		\begin{answer}
+			Odabiranje smo izvršili da kontinualni signal koji nosi informaciju zamijenimo povorkom odabiraka. Time smo smanjili uticaj smetnji i šumova, isti element upravljanja možemo koristiti da istovremeno upravljamo s više tehnoloških veličina i isti spojni put možemo koristiti za više tehnoloških veličina.
+		\end{answer}
+	
+		\item Zašto koristimo prvi i drugi oblik kompleksnog lika povorke odabiraka? \zplus
+		\begin{answer}
+			Prvi i drugi oblik kompleksnog lika povorke odabiraka koristimo pri analizi i sintezi digitalnih sistema upravljanja, dok treći oblik koristimo pri digitalnoj obradi signala i sintezi digitalnih filtera.
+		\end{answer}
+		
+	\end{enumerate}
+	\header{Predavanje 3}
+	\begin{enumerate}
+		\item \textbf{Navedite osobine $F^*(s)$.} \ispit
+		\begin{answer}
+			Kompleksni lik povorke odabiraka ima dvije osobine:
+			\begin{enumerate}[1.]
+				\item Kompleksni lik je periodična funkcija sa periodom ponavljanja $j\Omega$.
+					$$F^*(s) = F^*(s+jm\Omega),\ m=0,\pm1,\pm2,...$$
+				To znači da je $F^*(s)$ periodična funkcija sa periodom ponavljanja $j\Omega$ i ide i na jednu i na drugu stranu do beskonačnosti.
+				\item Ako poznajemo funkciju $F^*(s_1)$, onda istu vrijednost funkcija $F^*(s)$ ima i u svim tačkama $s_1+jm\Omega$.
+				\item Pošto karakteristične tačke moraju ležati u lijevoj poluravni kompleksne ravni, onda znamo da polovi i nule mogu biti realni, negativni jednostruki ili višestruki, i mogu biti u obliku konjugovano kompleksnih parova, ali njihov položaj mora biti unutar $j\Omega$ pa konjugovano kompleksni par može biti sa pozitivnim imaginarnim dijelom ili sa negativnim imaginarnim dijelom i najviše $\Omega/2$.
+			\end{enumerate}
+		\end{answer}
+		
+		\item \textbf{Zašto je primarni pojas ograničen sa $-j\Omega/2$ i $+j\Omega/2$?} \ispit
+		
+		\begin{answer}
+			Posmatrajmo kompleksni lik povorke odabiraka:
+				$$F^*(s) = \lap{f(t)i(t)} = \frac{1}{2\pi j} \int_{\gamma-j\infty}^{\gamma+j\infty} F(p) I(s-p)\ \text dp$$
+			$F(p)$ je Laplaceova transformacija originala koji nosi informaciju. $I(s-p)$ je Laplaceova transformacija povorke delta funkcija. Da bi se ovaj integral mogao odrediti mora postojati prava Re$(p)=\gamma$ koja će razdvajati singularitete tipa polova podintegralnih funkcija. Ako imamo povorku delta funkcija uzimamo da ide od nule zbog kauzalnosti pa je kompleksni lik povorke delta funkcija jednak:
+				$$I(s) = \suma_{k=0}^\infty e^{-kTs} = \frac{1}{1-e^{-Ts}}$$
+			Ovu sumu možemo odrediti ako se radi o geometrijskoj progresiji uz uslov da je $\left| e^{-Ts} \right| < 1$, dakle Re$(s)>0$. Znači, postojat će prava Re$(p)=\gamma$ koja će razdvojiti podintegralne singularitete tipa polova podintegralnih funkcija ako je Re$(s)>0$. Da bi imalo tehničkog smisla $F(p)$ mora imati polove u lijevoj poluravni kompleksne ravni $\{p\}$, a $I(s-p)$ će imati polove u desnoj poluravni kompleksne ravni $\{p\}$. Prava Re$(p)=\gamma$ tada očigledno egzistira i prolazi kroz I i IV kvadrant i paralelna je imaginarnoj osi i razdvojit će singularitete tipa polova podintegralnih funkcija. Ako $I(s-p)$ uvrstimo u definicioni konvolucioni integral dobijamo:
+				$$F^*(s) = \frac{1}{2\pi j} \int_{\gamma-j\infty}^{\gamma+j\infty} F(p) \frac{1}{1-e^{-T(s-p)}}\ \text dp$$
+			Polovi kompleksnog lika
+				$$I(s-p) = \frac{1}{1-e^{-T(s-p)}}$$
+			su korijeni karakteristične jednačine
+				$$1-e^{-T(s-p)}=0 \text{ ili } e^{-T(s-p)} = e^{j2\pi},\ n=0,\pm1,...$$
+			Rješenje ove jednačine određuje beskonačan broj polova kompleksnog lika $I(s-p)$:
+				$$p_n = s+jn\frac{2\pi}{T} = s+jn\Omega,\ n=0,\pm1,...$$
+			koji se multipliciraju paralelni imaginarnoj osi $\{p\}$-ravni sa rastojanjem $j\Omega$ između dva susjedna pola, gdje je $\Omega=\frac{2\pi}{T}$ kružna učestanost odabiranja.
+			$T$ je perioda uzorkovanja u vremenskom domenu, a $\Omega$ je perioda uzorkovanja u frekventnom domenu tj. kružna učestanost odabiranja. Ako kompleksnu promjenljivu $s$ zamijenimo sa $s+jm\Omega$ gdje je $m$ cijeli broj onda dobijamo:
+				$F^*(s+jm\Omega) = \suma_{k=0}^\infty f(kT)e^{-kT(s+jm\Omega)} = \suma_{k=0}^\infty f(kT) e^{-kTs}$
+			Dakle, $F^*(s+jm\Omega) = F^*(s)$, što znači da je kompleksni lik $F^*(s)$ periodična funkcija sa periodom ponavljanja $j\Omega$ i ide i na jednu i na drugu stranu do beskonačnosti. Unutar primarnog pojasa moraju biti sve karakteristične tačke kompleksnog lika $F^*(s)$, tj. od $-j\Omega/2$ do $j\Omega/2$. Polovi ne smiju biti izvan primarnog pojasa jer ćemo izgubiti informaciju što znači da nismo dobro odabrali periodu uzorkovanja jer nije dovoljno mala, brzina promjene signala je velika pa smo kazali da brzina promjene signala ne smije biti veća od jednog kvantnog nivoa.
+		\end{answer}
+		
+		\item \textbf{Zašto gubimo informaciju ako je perioda uzorkovanja prevelika?} \ispit %TODO doraditi
+		\begin{answer}
+			Povećanjem periode uzorkovanja smanjujemo Nyquistovo područje učestanosti. Može se desiti da sve karakteristične tačke (polovi i nule) kompleksnog lika povorke odabiraka ne budu unutar primarnog pojasa, čime smo trajno izgubili informaciju. Dalje, ne smije biti promjena signala na periodi uzorkovanja veća od jednog kvantnog nivoa. Ukoliko je perioda uzorkovanja prevelika onda ovaj zahtjev neće biti ispunjen. Odabirom periode uzorkovanja mi biramo kružnu učestanost odabiranja $\Omega$, a periodu uzorkovanja biramo u skladu sa brzinom promjene signala.
+		\end{answer}
+		\item \textbf{Šta je kolo zadrške nultog reda i šta mora zadovoljiti?} \ispit
+		
+		\begin{answer}
+			Kolo zadrške nultog reda ima kao osnovnu zadaću da povorku odabiraka $u^*(t)$ koja dolazi sa digitalnog računara pretvori u kontinualni signal $m(t)$. Druga zadaća je da ukloni ili barem u potrebnoj mjeri priguši komplementarne harmonike. Ovo kolo na svom izlazu daje stepenasti signal i koristimo ga jer su u praksi svi sistemi kontinualni i samo takav signal možemo dovesti na objekat upravljanja. Ovo kolo pri aproksimaciji funkcije koristi samo prvi član Taylorovog razvoja funkcije $u(t)$. Vrijednost signala $m(t)$ unutar jedne periode odabiranja je konstantna i paralelna sa vremenskom osom. Pošto je njegova prenosna funkcija
+				$$G_{h0}(s) = \frac{1-e^{-Ts}}{s}$$
+			imamo sljedeće probleme:
+			\begin{itemize}
+				\item U nazivniku imamo astatizam prvog reda. Time uvodimo komponentu integratora koja zakreće amplitudno faznu karakteristiku za $-\pi/2$, a to nam ugrožava stabilnsot sistema,
+				\item U brojniku imamo blok čistog transportnog kašnjenja pa također dolazi do ugrožavanja rezervi stabilnosti sistema.
+			\end{itemize}
+		\end{answer}
+		
+		\item \textbf{Koje su osnovne zadaće kola zadrške nultog reda, a koje su razlike u odnosu na idealni niskopropusni filter?} \ispit
+		\begin{answer}
+			Njegova osnovna zadaća je da povorku odabiraka koja dolazi sa digitalnog računara pretvori u kontinualni signal. Druga zadaća je da ukloni ili barem u potrebnoj mjeri priguši komplementarne harmonike. Razlike u odnosu na niskopropusni filter su sljedeće. Idealni niskopropusni filter propušta samo frekvencije između 0 i $\Omega/2$ dok su viši harmonici u potpunosti uklonjeni, dok kolo zadrške propušta i više harmonike ali se njihova amplituda smanjuje sa porastom frekvencije. Fazno frekventna karakteristika idealnog NF filtera je pravac sa konstantnim nagibom $\varphi_0$, dok je fazno frekventna karakteristika kola zadrške nultog reda pravac sa naglim skokovima koji se ponavljaju svako $\Omega$.
+			\begin{graph}
+				\begin{groupplot}[
+					every text node part/.style={align={center}},
+					group style={
+						group size=1 by 2,
+					},
+					axis lines=center,
+					xlabel=$\omega$, xlabel style={below right},
+					xmin=-0.5, xmax=5.5,
+					xtick={0,1,...,5}, xticklabels={0,$\frac{\Omega}{2}$, $\Omega$, $\frac{3\Omega}{2}$, $2\Omega$, $\frac{5\Omega}{2}$},
+					xticklabel style={font=\small},
+					%
+					ylabel style={above left},
+					width=10cm,
+					]
+					\definecolor{nf}{HTML}{00838F}
+					\nextgroupplot[
+					ylabel=$|G_{h0}(j\omega)|$,
+					ytick={0,1}, ymin=-0.2, ymax=1.5,
+					yticklabels={0,$A=T=\dfrac{2\pi}{\Omega}$},
+					yticklabel style={font=\small},
+					height=5cm,
+					]
+					\addplot[very thick, color=nf] coordinates {(0,1) (1,1) (1,0) (2.5,0)} node [pos=0.3, anchor=south west, align={center}] {Idealni NF filter};
+					\addplot[very thick,domain=-0.001:5.3, samples=100] {abs(sin(deg(x*pi/2))/(x*pi/2))} node[pos=0.3, anchor=south west] {Kolo zadrške nultog reda};
+					\nextgroupplot[
+					ymin=-4.5, ymax=0.8,
+					ylabel=$\phase{G_{h0}(j\omega)}$,
+					ytick={-3,-2,-1,0}, yticklabels={$-3\pi$,$-2\pi$,$-\pi$,0},
+					xticklabel style={above,yshift=0.5ex},
+					height=5.5cm,
+					]
+					\addplot[color=nf, very thick, domain=0:4.9, align={center}] {-0.65*x} node[anchor=south west, pos=0.9] {\color{nf}Idealni\\ \color{nf} NF filter};
+					
+					\addplot[very thick] coordinates {(0,0) (2,-1) (2,-2) (4,-3) (4,-4) (4.9,-4.45)} node[pos=0.7, anchor=north east, align={center}] {Kolo zadrške\\nultog reda};
+				\end{groupplot}
+			\end{graph}
+		\end{answer}
+		
+		\item \textbf{\color{mypink}Šta je primarni pojas, šta mora zadovoljiti i čime je omeđen? Prikažite ga.} \ispit
+		
+		Primarni pojas je pojas u kompleksnoj ravni $\{p\}$ koji je omeđen sa $-\j\Omega/2$ i $j\Omega/2$. Unutar primarnog pojasa moraju ležati karakteristične tačke, polovi i nule, kompleksnog lika $F(p)$ signala koji nosi informaciju. Polovi i nule kompleksnog lika povorke odabiraka se multipliciraju iznad i ispod primarnog pojasa do beskonačnosti u susjedne pojaseve koje nazivamo komplementarnim pojasevima i međusobno su udaljeni za $j\Omega$. \textbf{NEPOTPUN.}
+		
+		\item \textbf{\color{mypink} Objasnite relaciju:} \ispit
+			$$F^*(j\omega)\rvert_{n=0} = F_0^*(j\omega) = \frac{1}{T} F(j\omega)$$
+		
+		\begin{answer}
+			\textit{Odgovor:} \medskip \\
+			$F(j\omega)$ je Fourierova transformacija funkcije $f(t)$ koja nosi informaciju, $T$ je perioda uzorkovanja u vremenskom domenu i mi je biramo na osnovu brzine promjene kontinualnog signala. $F^*(j\omega)$ je Fourierova transformacija povorke odabiraka $f^*(t)$. Indeks $n=0$ nam govori da se radi o primarnom pojasu. \textbf{NEPOTPUN}
+		\end{answer}
+	
+		\item \textbf{\color{mypink} Objasniti relaciju:} \zplus
+			$$F^*(j\omega) = \frac{1}{T} \sum F(j\omega + jn\Omega)$$
+		
+		\noindent \hdashrule{\linewidth}{0.4pt}{3pt}
+		
+		\item Zašto imamo zadržavanje na narednoj periodi uzorkovanja i kada? \zplus
+		\begin{answer}
+			Moramo zadržati ulazni signal ako je na sljedećoj periodi uzorkovanja promjena ulaznog signala veća od jednog kvantnog nivoa, a u slučaju da nije promjena veća od jednog kvantnog nivoa signal možemo dovesti direktno na A/D konvertor.
+		\end{answer}
+		
+		\item Šta je bitno prilikom kodiranja? \zplus
+		\begin{answer}
+			Bitno je da je kvant dovoljno mali tako da vrijedi da je $f(t) = f(kT)$ za $t=kT$, nema greške odsijecanja jer u digitalnim sistemima upravljanja se vrši odabiranje po nivou i po vremenu. Po nivou se uzima cijeli broj kvantnih nivoa koji je najbliži vrijednosti signala i mora se pojaviti cijeli broj kvantnih nivoa. To izražavamo rezolucijom i što je veća rezolucija to je bolje odabiranje. Rezolucija predstavlja preciznost predstavljanja kontinualnog signala povorkom odabiraka.
+		\end{answer}
+		
+		\item Šta je ovo? \zplus
+			$$T\cdot \left|\frac{\sin\frac{\omega T}{2}}{\frac{\omega T}{2}}\right| \cdot e^{-j\frac{\omega T}{2}} \text{sgn}\left(\sin\frac{\omega T}{2}\right)$$
+		\begin{answer}
+			Ovo je frekventna karakteristika kola zadrške nultog reda. Ona nosi podatke o promjeni amplitude i početne faze isgnala na izlazu u odnosu na signal na ulazu, a te promjene je uzrokovala promjena kružne učestanosti na ulazu.
+		\end{answer}
+		
+		\item \textbf{Kakva je razlika između ove karakteristike i idealnog niskopropusnog filtera?} \zplus
+		\begin{answer}
+			Razlika je što ova amplitudno frekventna karakteristika samo prigušuje više harmonike dok idealni niskopropusni filter u potpunosti uklanja više harmonike, ima ravnu amplitudno frekventnu karakteristiku i ona je u granicama od $-\Omega/2$ do $\Omega/2$ (Nyquistovo područje učestanosti).
+		\end{answer}
+	
+		\item Fazno frekventna karakteristika niskopropusnog filtera? \zplus
+		\begin{answer}
+			Ova karakteristika je pravac čiji je nagib $T_d = \frac{\varphi_0}{\Omega}$ i to je vrijeme grupnog kašnjenja i ono je bitno jer kad propustimo povorku odabiraka moramo da dobijemo signal koji je isti kao $f(t)$, ali je zakašnjen za to vrijeme $T_d$.
+		\end{answer}
+		
+	\end{enumerate}
+	
+	\header{Predavanje 4}
+	\begin{enumerate}
+		\item \textbf{\color{mypink}Koje su osnovne zadaće D/A konvertora?} \ispit
+		\item \comment{\textbf{Šta je to diskretna prenosna funkcija?}}{Ekvivalentna formulacija: Šta je funkcija diskretnog prenosa?} \ispit
+		\begin{answer}
+			To je ono što opisuje diskretni dio sistema sa procesorom u glavnoj ulozi. Predstavlja odnos kompleksnog lika povorke odabiraka izlaza i kompleksnog lika povorke odabiraka ulaza sistema, $G^*(s) = \frac{C^*(s)}{R^*(s)}$ ili $G(z) = \frac{C(z)}{R(z)}$, pri nultim početnim uslovima.
+		\end{answer}
+		
+		\item \textbf{Objasnite razlike između $\mathcal Z$ i $\mathcal Z^{-1}$ u odnosu na $\mathcal L$ i $\mathcal L^{-1}$ transformacije.} \ispit
+		
+		\begin{answer}
+			Kod Laplaceove transformacije je kompleksni lik jednoznačno određen originalom i obratno. Kod z-transformacije je kompleksni lik povorke odabiraka jednoznačno određen povorkom odabiraka i obratno, dok original jednoznačno određuje z-transformaciju, a z-transformacija nije jednoznačno odredila original.
+		\end{answer}
+		
+		\item \textbf{\color{mypink}Šta je kontura stabilnosti u $z$ domenu?} \ispit
+		\item \textbf{\color{mypink}Šta je kontura dozvoljenog vremena smirenja u $z$ domenu?} \ispit
+		\item \textbf{\color{mypink}Odredite konturu stabilnosti. Pođite od ravni $\{s\}$ i odredite je u ravni $\{z\}$.} \ispit
+		\item \textbf{\color{mypink}Odredite konturu dozvoljenog vremena smirenja (iz ravni $\{s\}$ u ravan $\{z\}$).} \ispit
+		
+		\noindent \hdashrule{\linewidth}{0.4pt}{3pt}
+		
+		\item \textbf{Zašto uvodimo z-transformaciju?} \zplus
+		\begin{answer}
+			$\mathcal Z$-transformaciju uvodimo zato što u prvom i drugom obliku kompleksnog lika povorke odabiraka imamo transcendentne funkcije odnosno eksponencijalne funkcije. Primjenom z-transformacije dobijamo razlomljene racionalne forme.
+		\end{answer}
+		
+	\end{enumerate}
+
+	\header{Predavanje 5}
+	\begin{enumerate}
+		\item \textbf{\color{mypink}Razlike između $z$ domena i domena Laplaceove transformacije?} \zplus
+		\begin{answer}
+			Razlika između Laplaceove i z-transformacije je u tome da us original u vremenskom domenu i kompleksni lik u $s$ domenu jednoznačno određeni jedno drugim, ...\textbf{DOVRSITI}
+		\end{answer}
+		
+	\end{enumerate}
+	
+	\header{Predavanje 6}
+	\begin{enumerate}
+		\item Zašto se zove dominantni pol? \zplus
+		
+		\begin{answer}
+			Zato što ima najveći uticaj na odziv jer ima najduže vrijeme smirivanja tj. on ima najveću inercionu vremensku konstantu. On određuje karakter odziva, ponašanje oko novog stacionarnog stanja i vrijeme smirivanja.
+		\end{answer}
+	\end{enumerate}
+	
+	\noindent\hrule
+	\subsection*{Ostala (ne znam gdje da ih smjestim)}
+	\begin{enumerate}
+		\item \textbf{Objasnite relaciju $n \ge m$ sa ciljem objašnjenja realizacije funkcije diskretnog prenosa.} \ispit
+		\item \textbf{Objasnite konvolucioni algoritam realizacije funkcije diskretnog prenosa.} \ispit
+		\item \textbf{Preslikajte jedan od komplementarnih pojaseva u $\{z\}-$ravan.} \ispit
+		\item \textbf{\color{mypink}Šta su konture: stabilnosti, dozvoljenog vremena smirenja $t_s=T_s=\frac{1}{\sigma}$, dozvoljenog stepena oscilabilnosti?} \ispit
+	\end{enumerate}
+
+	\noindent \hrule
+	\subsection*{Staging area}
+	\begin{enumerate} %TODO Staging area
+			
+		\item \textbf{Koji je modulišući, a koji noseći signal?} \zplus %todo ove god?
+		
+		\begin{answer}
+			
+		\end{answer}
+	
+		\item \textbf{Kako glasi prvi oblik kompleksnog lika $F^*(s)$?} \zplus
+		
+		\item Prava $\gamma$? \zplus
+		
+		\item Gdje moraju ležati polovi podintegralne funkcije $f(t)$? \zplus
+		
+		\item Zašto je $\Omega$ važno, šta je perioda odabiranja? \zplus
+		
+		\item Koje su dvije zadaće D/A konvertora? \zplus
+		
+		\item Zašto je potrebno da D/A konvertor priguši više harmonike? \zplus
+		
+		\item Šta u praksi možemo uraditi i koje kolo za to koristimo? \zplus
+		
+		\item Zašto nam nije problem što ZOH propušta više harmonike? \zplus
+		
+		\item Koju smo pretpostavku napravili u drugom obilu kompleksnog lika $F^*(s)$ i zašto? \zplus
+		
+		\item Čime određujemo primarni pojas? \zplus
+		
+		\item Kad smo koristili teoremu uzorkovanja, odakle smo pročitali informaciju tako da je ne izgubimo?
+		
+		\item Koja su praktična ograničenja na smanjenje vremena odabiranja? \zplus
+		
+		\item Šta se može zaključiti poređenjem frekventnih karakteristika NF filtera i kola zadrške nultog reda, koje su razlike? \zplus
+		
+	\end{enumerate}
+	
+	\subsection*{Od prošlih generacija}
+	
+	\begin{enumerate}
+		\item Šta je perioda uzorkovanja i kako je određujemo za primarni pojas?
+		\item Kada je procesor moguće fizički realizovati? \textbf{Druga parcijala}
+		\item Šta je diskretna prenosna funkcija multivarijabilnog sistema, šta su joj članovi?
+		\item Upravljivost sistema.
+		\item Upravljivost multivarijabilnog sistema.
+		\item Kada za sistem kažemo da je stabilan?
+		\item Kako glasi DPF direktne grane u Nyquistovom kriteriju, koje uslove mora zadovoljavati?
+		\item Kojom funkcijom preslikavamo u Nyquistovom kriteriju i kako određujemo prirast argumenta?
+		\item Kada je procesor fizički ostvariv (pokazati na diferentnoj jednačini)? \textbf{Druga parcijala}
+		\item Kako se bira perioda uzorkovanja obzirom na primarni pojas?
+	\end{enumerate}
+\end{document}
